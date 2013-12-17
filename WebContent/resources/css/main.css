@@ -1,0 +1,36 @@
+.jumbotron { 
+	padding: 15px;
+	position: relative;
+	background: url("../img/portal.JPG");
+	margin-bottom: 5px;
+	line-height: 2.1428571435;
+}
+
+ /* footer*/
+.portal-text{
+	color:white;
+}
+html, body {
+	height: 100%;
+}
+/* footer {
+	color: #666;
+	background: #222;
+	padding: 17px 0 18px 0;
+	border-top: 1px solid #000;
+} */
+footer a {
+	color: #999;
+}
+footer a:hover {
+	color: #efefef;
+}
+.wrapper {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -63px;
+}
+.push {
+	height: 63px;
+}
