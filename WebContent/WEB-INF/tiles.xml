@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+    <definition name="baseLayout" template="/tiles/layout.jsp">
+        <put-attribute name="title" value="Template"/>
+        <put-attribute name="header" value="/tiles/header.jsp"/>
+        <put-attribute name="menu" value="/tiles/menu.jsp"/>
+        <put-attribute name="body" value="/tiles/body.jsp"/>
+        <put-attribute name="footer" value="/tiles/footer.jsp"/>
+    </definition>
+
+    <definition name="home" extends="baseLayout">
+        <put-attribute name="title" value="Home"/>
+        <put-attribute name="body" value="/pages/Home.jsp"/>
+    </definition>
+
+    <definition name="reserva" extends="baseLayout">
+        <put-attribute name="title" value="Reserva"/>
+        <put-attribute name="body" value="/pages/alojamiento/Reserva.jsp"/>
+    </definition>
+    
+	<definition name="alojamiento" extends="baseLayout">
+        <put-attribute name="title" value="Alojamiento"/>
+        <put-attribute name="body" value="/pages/alojamiento/Alojamiento.jsp"/>
+    </definition>
+    
+    <definition name="consultarconsumido" extends="baseLayout">
+        <put-attribute name="title" value="Consumido"/>
+        <put-attribute name="body" value="/pages/alojamiento/ConsultarConsumido.jsp"/>
+    </definition>    
+
+    <definition name="checkin" extends="baseLayout">
+        <put-attribute name="title" value="Check-in"/>
+        <put-attribute name="body" value="/pages/alojamiento/CheckIn.jsp"/>
+    </definition>
+
+    <definition name="checkout" extends="baseLayout">
+        <put-attribute name="title" value="Check-out"/>
+        <put-attribute name="body" value="/pages/alojamiento/CheckOut.jsp"/>
+    </definition>    
+    
+    <definition name="consultaringresoacompanante" extends="baseLayout">
+        <put-attribute name="title" value="Consumido"/>
+        <put-attribute name="body" value="/pages/alojamiento/ConsultarIngresoAcompanante.jsp"/>
+    </definition>    
+    
+    <definition name="informenocturno" extends="baseLayout">
+        <put-attribute name="title" value="Consumido"/>
+        <put-attribute name="body" value="/pages/alojamiento/InformeNocturno.jsp"/>
+    </definition>
+
+    <definition name="limpiaralojamientocamarera" extends="baseLayout">
+        <put-attribute name="title" value="Limpiar Hab"/>
+        <put-attribute name="body" value="/pages/alojamiento/LimpiarAlojamientoCamarera.jsp"/>
+    </definition>
+    
+    <definition name="preverllegadadelalojante" extends="baseLayout">
+        <put-attribute name="title" value="Consumido"/>
+        <put-attribute name="body" value="/pages/alojamiento/PreverLlegadaDelAlojante.jsp"/>
+    </definition>
+    
+    <definition name="reparaciondedanos" extends="baseLayout">
+        <put-attribute name="title" value="Consumido"/>
+        <put-attribute name="body" value="/pages/alojamiento/ReparacionDeDanos.jsp"/>
+    </definition>
+    
+    <definition name="reportedeturnocamarera" extends="baseLayout">
+        <put-attribute name="title" value="Consumido"/>
+        <put-attribute name="body" value="/example/ReporteDeTurnoCamarera.jsp"/>
+    </definition>
+    
+	<definition name="reporteentradaysalida" extends="baseLayout">
+        <put-attribute name="title" value="Consumido"/>
+        <put-attribute name="body" value="/pages/alojamiento/ReporteEntradaySalida.jsp"/>
+    </definition>
+
+    <definition name="reportetotalturnotojeferecepcion" extends="baseLayout">
+        <put-attribute name="title" value="Consumido"/>
+        <put-attribute name="body" value="/pages/alojamiento/ReporteTotalTurnoToJefeRecepcion.jsp"/>
+    </definition>      
+
+    <definition name="reporteturnotoamadellaves" extends="baseLayout">
+        <put-attribute name="title" value="Consumido"/>
+        <put-attribute name="body" value="/pages/alojamiento/ReporteTurnoToAmaDeLlaves.jsp"/>
+    </definition> 
+    
+    <definition name="revisionhabitacionesamadellaves" extends="baseLayout">
+        <put-attribute name="title" value="Consumido"/>
+        <put-attribute name="body" value="/pages/alojamiento/RevisionHabitacionesAmaDeLlaves.jsp"/>
+    </definition> 
+          
+    <definition name="gestionarReserva" extends="baseLayout">
+        <put-attribute name="title" value="Gestionar Reserva"/>
+        <put-attribute name="body" value="/pages/alojamiento/GestionarReserva.jsp"/>
+    </definition> 
+</tiles-definitions>
