@@ -1,5 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<%@ page import="com.google.gson.Gson" %>
+<%@ page import="com.google.gson.reflect.TypeToken" %>
+<%@ page import="java.util.List" %>
+<%@ page import="pe.libertadores.alojamiento.dto.MenuDTO" %>
+
+
 <div class="panel-group" id="panel-679024">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -7,27 +13,42 @@
 		</div>
 	</div>
 	<c:choose>
-		<c:when test="${not empty s_usuario.idUsuario}">
+		<c:when test="${not empty cookie.idUsuario.value}">
 			<c:set var="count" value="635208" scope="page" />
-
-			<c:forEach var="p" items="${s_menuPadre}">
+			
+			<c:set var="jsmPadre" value="${cookie.menuPadre.value}" />		
+			<c:set var="jsmHijo" value="${cookie.menuHijo.value}" />
+			
+			<% String jsMenuPadre=(String)pageContext.getAttribute("jsmPadre");
+			   Gson gs=new Gson();
+			   
+			   List<MenuDTO> listMenuPadre=gs.fromJson(jsMenuPadre, new TypeToken<List<MenuDTO>>(){}.getType());
+			   for(MenuDTO mp : listMenuPadre){
+			%>
+<%-- 			<c:forEach var="p" items="${s_menuPadre}"> --%>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<a class="panel-title" data-toggle="collapse"
 							data-parent="#panel-679024" href="#panel-element-${count}"> <c:out
-								value="${p.label}" />
+								value="<%=mp.getLabel() %>" />
 						</a>
 					</div>
 					<div id="panel-element-${count}" class="panel-collapse collapse <c:if test="${count == 635208 }">in</c:if>">
-						<c:forEach var="h" items="${s_menuHijo}">
+<%-- 						<c:forEach var="h" items="${s_menuHijo}"> --%>
+			<% String jsMenuHijo=(String)pageContext.getAttribute("jsmHijo");
+			   
+			   List<MenuDTO> listMenuHijo=gs.fromJson(jsMenuHijo, new TypeToken<List<MenuDTO>>(){}.getType());
+			   for(MenuDTO mh : listMenuHijo){
+			   %>
 							<div class="panel-body">
-								<a href="${h.description}"><c:out value="${h.label}" /></a>
+								<a href="<%= mh.getDescription()%>"><c:out value="<%= mh.getLabel() %>" /></a>
 							</div>
-						</c:forEach>
+				<%} %>
 					</div>
 				</div>
 				<c:set var="count" value="${count + 1}" scope="page" />
-			</c:forEach>
+				<%} %>
+<%-- 			</c:forEach> --%>
 		</c:when>
 		<c:otherwise>
 			<div class="panel panel-default">

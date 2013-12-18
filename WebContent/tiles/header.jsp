@@ -25,10 +25,10 @@
 				<a href="#">O Google+</a>
 			</p>
 			<c:choose>
-				<c:when test="${not empty s_usuario.idUsuario}">
+				<c:when test="${not empty cookie.idUsuario.value}">
 					<p class="navbar-text navbar-right">
 						Conectado como <a href="#" id="linkLogeo"><c:out
-								value="${s_usuario.user}" /></a>
+								value="${cookie.idUsuario.value}" /></a>
 						<s:url action="logout.action" var="cerrarSesion"></s:url>
 						<a href="<s:property value="#cerrarSesion" />">(Salir)</a>
 					</p>
