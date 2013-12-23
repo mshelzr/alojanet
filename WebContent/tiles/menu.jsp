@@ -9,7 +9,7 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<a class="panel-title" data-parent="#panel-679024"
-				href="javascript:void(0);">Inicio</a>
+				href="home.action">Inicio</a>
 		</div>
 	</div>
 	<c:choose>

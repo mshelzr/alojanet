@@ -46,14 +46,15 @@
 						<form action="agregarReserva.action">
 							<table>
 								<tr>
-									<td><img src="../resources/img/choose_domain.bmp"></td>
+									<td><img src="../resources/img/choose_domain.png"></td>
 								</tr>
 								<tr>
 									<td>
 										<div class="input-group date " id="e" data-date="12-02-2012"
 											data-date-format="mm-dd-yyyy">
-											<input class="form-control input-lg" type="text" name="fInicio"
-												placeholder="Desde"> <span class="input-group-addon"><i
+											<input class="form-control input-lg" type="text"
+												name="fInicio" placeholder="Desde"> <span
+												class="input-group-addon"><i
 												class="glyphicon glyphicon-calendar"></i></span>
 										</div>
 									</td>
@@ -79,7 +80,7 @@
 								<tr>
 									<td></td>
 									<td></td>
-									<td><img src="../resources/img/choose_ambiente.bmp"
+									<td><img src="../resources/img/choose_ambiente.png"
 										height="40"></td>
 									<td></td>
 								</tr>
@@ -145,21 +146,12 @@
 									<ul id="menu1" class="dropdown-menu" role="menu"
 										aria-labelledby="drop4">
 										<li role="presentation"><a role="menuitem" tabindex="-1"
-											href="http://twitter.com/fat">Abrir Reserva</a></li>
+											href="agregarReserva.action">Abrir Reserva</a></li>
 									</ul></li>
 							</c:otherwise>
 						</c:choose>
 						<li class="dropup"><a id="drop8" role="button"
-							data-toggle="dropdown" href="#">Fotos<b class="caret"></b></a>
-							<ul id="menu3" class="dropdown-menu" role="menu"
-								aria-labelledby="drop6">
-								<li role="presentation"><a role="menuitem" tabindex="-1"
-									href="http://twitter.com/fat">¿Quiénes Somos?</a></li>
-								<li role="presentation"><a role="menuitem" tabindex="-1"
-									href="http://twitter.com/fat">Grupo Libertadores</a></li>
-								<li role="presentation"><a role="menuitem" tabindex="-1"
-									href="http://twitter.com/fat">Libertadores en la sociedad</a></li>
-							</ul></li>
+							data-toggle="dropdown" href="#">Fotos </a></li>
 						<li class="dropup"><a id="drop5" role="button"
 							class="dropdownfondoprimary" data-toggle="dropdown" href="#">Carta<b
 								class="caret"></b></a>
@@ -176,10 +168,9 @@
 									href="http://twitter.com/fat">Bebidas</a></li>
 							</ul></li>
 						<li class="dropup"><a id="drop7" role="button"
-							data-toggle="dropdown" href="#">Promociones<b class="caret"></b></a></li>
+							data-toggle="dropdown" href="#">Promociones</a></li>
 						<li class="dropup"><a id="drop8" role="button"
 							class="dropdownfondoprimary" data-toggle="dropdown" href="#">Convenios
-								<b class="caret"></b>
 						</a></li>
 						<li class="dropup"><a id="drop8" role="button"
 							data-toggle="dropdown" href="#">Conocenos<b class="caret"></b></a>
@@ -203,8 +194,8 @@
 					<div id="left_content">
 						<div class="content_title">
 							<h1>Una organizaciòn estable
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;become
-								a professional</h1>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sólida
+								infraestructura </h1>
 						</div>
 						<div class="monster_row">
 							<div class="monster">
@@ -213,13 +204,12 @@
 									<img src="../resources/img/analyze.gif">
 								</div>
 
-								<div class="monster_description">Every free account comes
-									with unlimited domains and easy 1-click registration system.</div>
-								<div class="monster_link">
-									Create custom DNS records, Nameserver and URL Forwarding in
-									real-time - no waiting time. Choose any of the <b>57</b> domain
-									extensions available.
-								</div>
+								<div class="monster_description">Praesent sapien massa,
+									convallis a pellentesque nec, egestas non nisi. Pellentesque in
+									ipsum id orci porta dapibus..</div>
+								<div class="monster_link">Quisque velit nisi, pretium ut lacinia
+									in, elementum id enim. Vivamus magna justo, lacinia eget
+									consectetur sed, convallis at tellus. </div>
 							</div>
 						</div>
 						<!--monster_row-->

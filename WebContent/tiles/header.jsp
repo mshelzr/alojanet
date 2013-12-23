@@ -10,7 +10,7 @@
 				<span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
 					class="icon-bar"></span><span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">Libertadores</a>
+			<a class="navbar-brand" href="home.action">Libertadores</a>
 		</div>
 
 		<div class="collapse navbar-collapse"
