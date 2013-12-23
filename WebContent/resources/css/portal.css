@@ -1,0 +1,190 @@
+.navbar {
+	margin-bottom: 0;
+}
+
+.jumbotron {
+	background: none;
+}
+
+#contenidoPortal {
+	background: url("../img/header_bg.gif");
+}
+
+.dropdownfondoprimary {
+	background-color: #CEE7F7;
+}
+
+.dropdownfondosuave {
+	background-color: #3C7EE0;
+	color:white;
+}
+
+/*--left side--*/
+.monster_row {
+	width: 285px;
+	height: 155px;
+	margin-right: 15px;
+	float: left;
+}
+
+.monster {
+	width: 285px;
+	height: 230px;
+	margin: 0px 0px 14px 0px;
+	padding: 0px;
+	float: left;
+}
+
+.monster_picture {
+	width: 143px;
+	height: 87px;
+	margin-right: 10px;
+	float: left;
+}
+
+.monster_description {
+	width: 130px;
+	float: left;
+	font-size: 12px;
+}
+
+.monster_link {
+	float: left;
+	margin-top: 0px;
+	font-size: 12px;
+}
+
+.monster_message {
+	width: 600px;
+	float: left;
+}
+
+.monster_message_link {
+	width: 100px;
+	float: left;
+}
+
+.mycontent-left {
+	border-right: 2px dashed #333;
+}
+
+.content_title h1 {
+	font-size: 20px;
+	margin: 0px 0px 25px 0px;
+}
+
+/*halcon*/
+.pie-contactanos {
+	background: url(../img/fnd-footer.png) left no-repeat;
+	width: 300px;
+	height: 327px;
+	float: right;
+	margin: 19px 4px 0 0;
+	position: relative;
+	padding-top: 18px;
+	font-size: 12px;
+}
+
+.pie-contactanos .operadora {
+	width: 144px;
+	height: 252px;
+	z-index: 10;
+	background: url(../img/img-footer.png) bottom center no-repeat;
+	margin: 93px 0 0 156px;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.pie-contactanos h4 {
+	margin: 0 0 0 36px;
+	color: #fff;
+	font-size: 18px;
+	font-weight: normal;
+}
+
+.pie-contactanos .llamada {
+	width: 229px;
+	height: 120px;
+	border-radius: 15px 0 0 0;
+	margin: 11px 0 4px 18px;
+	color: #fff;
+	padding: 15px 0 0 19px;
+	background: url(../img/esq_nuestra_banca_telefonica.jpg) top left
+		no-repeat rgba(85, 133, 160, 0.96);
+}
+
+.facebook {
+	display: block;
+	background: url(../img/sprite-iconos.png);
+	float: left;
+	margin-top: 15px;
+	background-position: 0 -1px;
+}
+
+.twitter {
+	display: block;
+	background: url(../img/sprite-iconos.png);
+	float: left;
+	margin-top: 15px;
+	background-position: 0 -38px;
+}
+
+.googleplus {
+	display: block;
+	background: url(../img/sprite-iconos.png);
+	float: left;
+	margin-top: 15px;
+	background-position: 0 -115px;
+}
+
+.pie-contactanos .llamada em.pie-icono {
+	width: 25px;
+	height: 25px;
+	display: block;
+	background: url(../img/sprite-iconos.png);
+	float: left;
+	background-position: 0 -369px;
+	margin-top: 8px;
+}
+
+.pie-contactanos .contacto-forma .forma-texto a {
+	color: #fff;
+}
+
+a {
+	text-decoration: none;
+}
+
+.pie-contactanos .contacto-forma {
+	width: 157px;
+	margin-left: 36px;
+}
+
+.pie-contactanos .llamada .pie-texto {
+	margin: 0 0 0 29px;
+	line-height: 14px;
+}
+
+.pie-contactanos .llamada .pie-numero {
+	font-size: 22px;
+	font-weight: bold;
+	margin: 11px 0 5px 28px;
+}
+
+.pie-contactanos .contacto-forma em {
+	width: 21px;
+	height: 21px;
+	display: block;
+	background: url(../img/sprite-iconos.png);
+	float: left;
+	margin-top: 10px;
+}
+
+.pie-contactanos .contacto-forma em.icono-p1 {
+	background-position: 1px -415px;
+}
+
+.pie-contactanos .contacto-forma em.icono-p2 {
+	background-position: 1px -455px;
+}
