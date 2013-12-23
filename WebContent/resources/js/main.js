@@ -1,4 +1,16 @@
 $(function () {
+	
+	var flag = $("#flagFromHome").val();
+	if(flag == 'true'){
+		var fecInicio=$("#fecInicioFromHome").val();
+		var fecInicioFin=$("#fecFinFromHome").val();
+
+		$("#idFechaInitHotel").val(fecInicio);
+		$("#idFechaEndHotel").val(fecInicioFin);
+		
+		$("#myModal").modal();
+	}
+
 	$("#alojantedata").dialog({
 		autoOpen: false,
 		modal: true
@@ -53,7 +65,7 @@ $(function () {
 		restablecerTodo();
 		document.formReserva.reset();
 	});
-	
+
 	$("#btnGeneralDeReservaLogin").click(function () {
 		$('#question').dialog('close');
 		$('#dialogLogueo').dialog('close');
@@ -62,8 +74,8 @@ $(function () {
 		restablecerTodo();
 		document.formReserva.reset();
 	});
-	
-	//dialog login nav
+
+//	dialog login nav
 	$("#dialogLoginNav").dialog({
 		autoOpen: false,   
 		draggable: false,
@@ -72,36 +84,36 @@ $(function () {
 		position: "right top"
 	});
 	$("#linkLogeo").click(function () {
-    	$('#resultLogin').empty();
+		$('#resultLogin').empty();
 		document.login.reset();
-		
+
 		$('#dialogLoginNav').dialog('open');
 	});
 	$("#btnLoginNav").click(function () {
-		
+
 		jQuery.ajax({ 
-	        type: "post", 
-	        url: "dialogLogueo.action", 
-	        dataType:"json",
-	        data:{username:$('#username').val(),password:$('#password').val()}, 
-	        success:function(data){
-	        	$('#resultLogin').empty();
-	        	mensaje=jQuery.parseJSON(data.mensaje);
+			type: "post", 
+			url: "dialogLogueo.action", 
+			dataType:"json",
+			data:{username:$('#username').val(),password:$('#password').val()}, 
+			success:function(data){
+				mensaje=jQuery.parseJSON(data.mensaje);
 
-	            if(mensaje.success=='success'){
-	            	window.location.href = mensaje.urlRedirect; 
-	            }else if(mensaje.errorpwd=='wrongpwd'){
-	            	$('#resultLogin').append("Datos Incorrectos");
-	            }else{
-	            	$('#resultLogin').append("El usuario no existe");
-	 	           
-	            }	          
-	        }, 
-	        error: function(xhr, textStatus, errorThrown) { 
-	            console.info('Error!  Status = ' + xhr.status); 
-	         }
+				if(mensaje.success=='success'){
+					window.location.href = mensaje.urlRedirect; 
+				}else if(mensaje.errorpwd=='wrongpwd'){
+					$('#btnLoginNav').attr('data-content','Datos Incorrectos.');
+			        $('#btnLoginNav').popover('toggle');
+				}else{
+					$('#btnLoginNav').attr('data-content','El usuario no existe.');
+			        $('#btnLoginNav').popover('toggle');
+				}	          
+			}, 
+			error: function(xhr, textStatus, errorThrown) { 
+				console.info('Error!  Status = ' + xhr.status); 
+			}
 
-	    }); 
+		}); 
 	});
 	$("#btnCargarCabanas").click(function () {
 		$('#cargarCabanas').show('slow');
@@ -110,6 +122,7 @@ $(function () {
 		$('#cargarHabitaciones').show('slow');
 	});
 	$(".linkCargarAcompanantes").click(function () {
+		$('#habitacionSeleccionada').show();
 		$('#cargarAcompanantes').show('slow');
 		$('#btnGuardarCambios').show();
 	});
@@ -117,7 +130,7 @@ $(function () {
 		$('#cargarCabanasRecreacion').show('slow');
 	});
 
-	//GS
+//	GS
 	$(".linkCargarAcompanantesGS").click(function () {
 		$('#cargarAcompanantes').show('slow');
 		$('#btnAgregarReservaGS').show();
@@ -178,7 +191,13 @@ $(function () {
 	});
 	$("#btnAgregarReservaGS").click(function () {
 		$("#agregarReserva").dialog("close");
-	});
+	});	
+
+	//nuevo ambiente
+	
+	//calendario de la busqueda del portal
+	$(".input-group.date").datepicker({ autoclose: true, todayHighlight: true });
+	
 });
 
 function restablecerTodo(){

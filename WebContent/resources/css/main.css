@@ -1,16 +1,20 @@
-.jumbotron { 
-	padding: 15px;
-	position: relative;
-	background: url("../img/portal.JPG");
-	margin-bottom: 5px;
-	line-height: 2.1428571435;
+.navbar {
+	margin-bottom: 0;
 }
 
- /* footer*/
-.portal-text{
-	color:white;
+.jumbotron {
+	background: url("../img/home-bg-01.jpg");
 }
-html, body {
+
+#contenidoPortal {
+	background: none;
+}
+/* footer*/
+.portal-text {
+	color: white;
+}
+
+html,body {
 	height: 100%;
 }
 /* footer {
@@ -22,15 +26,42 @@ html, body {
 footer a {
 	color: #999;
 }
+
 footer a:hover {
 	color: #efefef;
 }
+
 .wrapper {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
 	margin: 0 auto -63px;
 }
+
 .push {
 	height: 63px;
+}
+
+.facebook {
+	display: block;
+	background: url(../img/sprite-iconos.png);
+	float: left;
+	margin-top: 15px;
+	background-position: 0 -1px;
+}
+
+.twitter {
+	display: block;
+	background: url(../img/sprite-iconos.png);
+	float: left;
+	margin-top: 15px;
+	background-position: 0 -38px;
+}
+
+.googleplus {
+	display: block;
+	background: url(../img/sprite-iconos.png);
+	float: left;
+	margin-top: 15px;
+	background-position: 0 -115px;
 }

@@ -12,7 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 <!-- 	llamada usando procedure de mysql -->
 	<select id="q_menu" resultType="menuDtoMybatis" statementType="CALLABLE">
- 		{ CALL tree_get_branch(1,NULL,"_",#{idPerfil, mode=IN, jdbcType=INTEGER})}
+ 		{ CALL tree_get_branch(1,NULL," ",#{idPerfil, mode=IN, jdbcType=INTEGER})}
 	</select>
 		
 </mapper>

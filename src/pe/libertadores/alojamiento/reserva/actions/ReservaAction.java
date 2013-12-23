@@ -1,4 +1,4 @@
-package pe.libertadores.alojamiento.reserva.action;
+package pe.libertadores.alojamiento.reserva.actions;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -6,19 +6,27 @@ import org.apache.struts2.convention.annotation.Result;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+@SuppressWarnings("serial")
 @ParentPackage(value="alojamiento")
 public class ReservaAction extends ActionSupport {
 
-	private static final long serialVersionUID = -4753048779190212810L;
 	private String gojsp;
 	private String data="";
 	private String trackingLine="";
 	private String timeout="";
 	private String derror="";
+	private String fInicio="";
+	private String fFin="";
+	private boolean flagBusquedaHome=false;
 
-	@Action(value="agregarReserva",results={@Result(location="reserva",name="success",type="tiles")})
-	public String generarReserva(){
-
+	@Action(value="/agregarReserva",results={@Result(location="reserva",name="success",type="tiles")})
+	public String agregarReserva(){
+		
+		
+		if(!"".equals(fInicio) || !"".equals(fFin)){
+			flagBusquedaHome=true;
+		}
+		
 		return SUCCESS;
 	}
 	
@@ -104,5 +112,26 @@ public class ReservaAction extends ActionSupport {
 	public String getTrackingLine() {
 		return trackingLine;
 	}
+
+	public String getFInicio() {
+		return fInicio;
+	}
+
+	public void setFInicio(String fInicio) {
+		this.fInicio = fInicio;
+	}
+
+	public String getFFin() {
+		return fFin;
+	}
+
+	public void setFFin(String fFin) {
+		this.fFin = fFin;
+	}
+
+	public boolean getFlagBusquedaHome() {
+		return flagBusquedaHome;
+	}
+	
 
 }

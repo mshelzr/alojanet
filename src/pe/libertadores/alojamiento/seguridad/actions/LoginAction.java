@@ -1,4 +1,4 @@
-package pe.libertadores.alojamiento.seguridad.action;
+package pe.libertadores.alojamiento.seguridad.actions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,7 +71,7 @@ public class LoginAction extends ActionSupport {
 				Cookie menuHijoC=new Cookie("menuHijo",jsMenuHijo);
 				
 				idUsuario.setMaxAge(60*60);
-				idPerfil.setMaxAge(60*60);		
+				idPerfil.setMaxAge(60*60);
 				menuPadreC.setMaxAge(60*60);
 				menuHijoC.setMaxAge(60*60);
 				
@@ -99,7 +99,6 @@ public class LoginAction extends ActionSupport {
 					url="home.action";
 				}
 
-				System.out.println("url: " + url);
 				resultMap.put("urlRedirect", url);
 				resultMap.put("success", "success");
 
@@ -114,21 +113,25 @@ public class LoginAction extends ActionSupport {
 		return SUCCESS;
 	}
 
-	@Action(value="logout",results={@Result(location="home",name="success",type="tiles")})
+	@Action(value="logout",results={@Result(location="layoutPortal",name="success",type="tiles")})
 	public String cerrarSesion(){
 		HttpServletRequest req = ServletActionContext.getRequest();		
 		HttpServletResponse resp = ServletActionContext.getResponse();
+		
+		Cookie idUsuario=new Cookie("idUsuario", "");
+		Cookie idPerfil=new Cookie("idPerfil", "");
+		
+		resp.addCookie(idUsuario);
+		resp.addCookie(idPerfil);
 
-
-		 Cookie[] cookies = req.getCookies();
-		    if (cookies != null)
-		        for (int i = 0; i < cookies.length; i++) {
-		            cookies[i].setValue("");
-		            cookies[i].setPath("/");
-		            cookies[i].setMaxAge(0);
-		            resp.addCookie(cookies[i]);
-		        }
-		    
+		Cookie[] cooks=req.getCookies();
+		
+		for (Cookie c : cooks) {
+			c.setValue("");
+			c.setMaxAge(0);
+			resp.addCookie(c);
+		}
+		
 //		Map<String,Object> sesion=ActionContext.getContext().getSession();
 //		sesion.remove("s_usuario");
 //		sesion.remove("s_menu");

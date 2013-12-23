@@ -1,5 +1,5 @@
-<%-- <%@ page contentType="text/html; charset=UTF-8" %> --%>
-<%-- <%@ taglib prefix="s" uri="/struts-tags" %> --%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <!-- <label>Actions:</label> -->
 <!-- <br/><br/> -->
 <%-- <s:url id="categoryReserva" action="Reserva.action" var="reserva"> --%>
@@ -46,9 +46,6 @@
 <%-- </s:url> --%>
 <%-- <s:url id="category" action="Reserva.action" var="revisionhabitacionesamadellaves"> --%>
 <%--     <s:param name="gojsp" >revisionhabitacionesamadellaves</s:param> --%>
-<%-- </s:url> --%>
-<%-- <s:url id="category" action="Reserva.action" var="gestionarReserva"> --%>
-<%--     <s:param name="gojsp" >gestionarReserva</s:param> --%>
 <%-- </s:url> --%>
 <!-- <div style="color:grey"> -->
 <%-- <a class="padeado" href="<s:property value="#reserva" />" >Reserva (Usuario/Recepcionista/Cliente)</a><br/> --%>

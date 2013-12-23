@@ -9,7 +9,8 @@
 <sj:head jqueryui="true" jquerytheme="trontastic" locale="es" />
 <title><tiles:insertAttribute name="title" ignore="true" /></title>
 
-<link rel="stylesheet" type="text/css" href="../resources/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="../resources/css/bootstrap.min.css">
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="../resources/css/jquery.ui.all.css">
 <script type="text/javascript" src="../resources/js/jquery-ui.js"></script>
@@ -18,10 +19,12 @@
 </head>
 <body>
 	<div class="wrapper">
+		<div class="row clearfix">
+			<tiles:insertAttribute name="header" />
+			<tiles:insertAttribute name="subheader" />
+		</div>
+
 		<div class="container">
-			<div class="row clearfix">
-				<tiles:insertAttribute name="header" />
-			</div>
 			<div class="row clearfix">
 				<!-- Context con menu -->
 				<div class="col-md-3 column">
@@ -33,14 +36,13 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- Pie de pagina-->
+	</div>
+	<!-- Pie de pagina-->
 		<div class="push"></div>
-	</div>
-	<div id="footer" class="container">
-		<div class="navbar navbar-default">
-			<tiles:insertAttribute name="footer" />
+		<div id="footer" class="container">
+			<div class="navbar navbar-default">
+				<tiles:insertAttribute name="footer" />
+			</div>
 		</div>
-	</div>
 </body>
 </html>

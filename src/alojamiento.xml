@@ -8,7 +8,7 @@
 -->
 <struts>
     <package name="alojamiento" namespace="/alojamiento" extends="struts-default,json-default,tiles-default">
-
+		
 <!--         <action name="Login_*" method="{1}" class="pe.libertadores.alojamiento.seguridad.action.Login"> -->
 <!--             <result name="input">/alojamiento/Login.jsp</result> -->
 <!--             <result type="redirectAction">menu</result> -->

@@ -4,7 +4,16 @@
 <%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <jsp:useBean id="fechita" class="java.util.Date" />
-<h3>Formulario de Reserva</h3>
+
+<input type="hidden" value='<s:property value="flagBusquedaHome"/>'
+	id="flagFromHome" />
+<input type="hidden" value='<s:property value="fInicio"/>'
+	id="fecInicioFromHome" />
+<input type="hidden" value='<s:property value="fFin"/>'
+	id="fecFinFromHome" />
+<div class="page-header">
+	<h1 id="glyphicons">Formulario de Reserva</h1>
+</div>
 <br />
 <table border="1" id="pool" tabindex='1' style="display: none">
 	<tr>
@@ -43,66 +52,105 @@
 				<label>F. Fin</label>
 				<sj:datepicker size="18" id="idFechaEndHotel" timepicker="true"
 					displayFormat="yy-mm-dd" showButtonPanel="true" showOn="button" />
-				<label>Con Minibar: </label> <input type="checkbox" /> <input
-					type="button" value="Buscar" id="btnCargarCabanas" /> <br /> <br />
-				<div id="cargarCabanas" style="display: none">
-					<table border="1">
-						<caption>Seleccione la Cabana</caption>
-						<tr>
-							<th>Sel.</th>
-							<th width="60">Foto</th>
-							<th width="130">Número</th>
-							<th width="130">Cant Habitaciones</th>
-						</tr>
-						<tr>
-							<td><input type="radio" name="numcabana"
-								class="linkCargarCabanas" /></td>
-							<td><img alt="cabana1" src="../resources/img/cabana1.jpg"></td>
-							<td>C001</td>
-							<td>50</td>
-						</tr>
-						<tr>
-							<td><input type="radio" name="numcabana"
-								class="linkCargarCabanas" /></td>
-							<td><img alt="cabana2" src="../resources/img/cabana2.jpg"></td>
-							<td>C002</td>
-							<td>49</td>
-						</tr>
-					</table>
+				<label>Con Minibar: </label> <input type="checkbox" />
+
+				<!-- Button trigger modal -->
+				<a data-toggle="modal" href="#myModal" class="btn btn-default">Buscar</a>
+
+				<!-- Modal -->
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-hidden="true">&times;</button>
+								<h4 class="modal-title">Resultado de busqueda</h4>
+							</div>
+							<div class="modal-body">
+								<table border="1">
+									<caption>Seleccione la Cabana</caption>
+									<tr>
+										<th>Sel.</th>
+										<th width="60">Foto</th>
+										<th width="130">Número</th>
+										<th width="130">Cant Habitaciones</th>
+									</tr>
+									<tr>
+										<td><input type="radio" name="numcabana"
+											class="linkCargarCabanas" /></td>
+										<td><img alt="cabana1" src="../resources/img/cabana1.jpg"></td>
+										<td>C001</td>
+										<td>50</td>
+									</tr>
+									<tr>
+										<td><input type="radio" name="numcabana"
+											class="linkCargarCabanas" /></td>
+										<td><img alt="cabana2" src="../resources/img/cabana2.jpg"></td>
+										<td>C002</td>
+										<td>49</td>
+									</tr>
+								</table>
+								<table border="1">
+									<caption>Seleccione la habitacion</caption>
+									<tr>
+										<th>Sel.</th>
+										<th width="60">Foto</th>
+										<th width="130">#Cabana</th>
+										<th width="130">#Habitaciones</th>
+										<th>Precio</th>
+									</tr>
+									<tr>
+										<td><input type="radio" name="numhabitacion"
+											class="linkCargarAcompanantes " data-dismiss="modal" /></td>
+										<td><img alt="hotel1" src="../resources/img/hotel1.jpg"></td>
+										<td>C001</td>
+										<td>3</td>
+										<td>S/. 300</td>
+									</tr>
+									<tr>
+										<td><input type="radio" name="numhabitacion"
+											class="linkCargarAcompanantes" data-dismiss="modal" /></td>
+										<td><img alt="hotel2" src="../resources/img/hotel2.jpg"></td>
+										<td>C001</td>
+										<td>4</td>
+										<td>S/. 400</td>
+									</tr>
+									<tr>
+										<td><input type="radio" name="numhabitacion"
+											class="linkCargarAcompanantes" data-dismiss="modal" /></td>
+										<td><img alt="hotel3" src="../resources/img/hotel3.jpg"></td>
+										<td>C001</td>
+										<td>4</td>
+										<td>S/. 500</td>
+									</tr>
+								</table>
+
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">Close</button>
+								<!-- 				          <button type="button" class="btn btn-primary">Save changes</button> -->
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal-dialog -->
 				</div>
-				<div id="cargarHabitaciones" style="display: none">
+				<!-- /.modal -->
+				<br /> <br />
+				<div id="habitacionSeleccionada" style="display: none">
 					<table border="1">
-						<caption>Seleccione la habitacion</caption>
+						<caption>Habitación seleccionada</caption>
 						<tr>
-							<th>Sel.</th>
-							<th width="60">Foto</th>
-							<th width="130">#Cabana</th>
-							<th width="130">#Habitaciones</th>
-							<th>Precio</th>
+							<th width="60"></th>
+							<th width="130">Habitacion</th>
+							<th width="130">Cabaña</th>
 						</tr>
 						<tr>
-							<td><input type="radio" name="numhabitacion"
-								class="linkCargarAcompanantes" /></td>
 							<td><img alt="hotel1" src="../resources/img/hotel1.jpg"></td>
 							<td>C001</td>
 							<td>3</td>
-							<td>S/. 300</td>
-						</tr>
-						<tr>
-							<td><input type="radio" name="numhabitacion"
-								class="linkCargarAcompanantes" /></td>
-							<td><img alt="hotel2" src="../resources/img/hotel2.jpg"></td>
-							<td>C001</td>
-							<td>4</td>
-							<td>S/. 400</td>
-						</tr>
-						<tr>
-							<td><input type="radio" name="numhabitacion"
-								class="linkCargarAcompanantes" /></td>
-							<td><img alt="hotel3" src="../resources/img/hotel3.jpg"></td>
-							<td>C001</td>
-							<td>4</td>
-							<td>S/. 500</td>
 						</tr>
 					</table>
 				</div>
@@ -114,8 +162,7 @@
 						<option>DNI</option>
 						<option>Pasaporte</option>
 					</select> <label>Num Documento: </label> <input type="text" /> <input
-						type="button" value="Agregar" /> <br />
-					<br />
+						type="button" value="Agregar" /> <br /> <br />
 					<table border="1">
 						<tr>
 							<th width="130">Nombre Completo</th>
@@ -203,8 +250,7 @@
 						<option>DNI</option>
 						<option>Pasaporte</option>
 					</select> <label>Num Documento: </label> <input type="text" /> <input
-						type="button" value="Agregar" /> <br />
-					<br />
+						type="button" value="Agregar" /> <br /> <br />
 					<table border="1">
 						<tr>
 							<th width="130">Nombre Completo</th>
@@ -299,12 +345,10 @@
 </div>
 <div id="dialogLogueo" title="Indentificación">
 	<form>
-		<label>Usuario: </label>
-		<input type="text" id="user"/> <br /> 
-		<label>Contrasena</label>
-		<input type="text" id="pwd" />
-		<br /> <input type="button" value="Entrar" id="btnGeneralDeReservaLogin" /> 
-		<input type="button" value="Olvidé contraseña" />
+		<label>Usuario: </label> <input type="text" id="user" /> <br /> <label>Contrasena</label>
+		<input type="text" id="pwd" /> <br /> <input type="button"
+			value="Entrar" id="btnGeneralDeReservaLogin" /> <input type="button"
+			value="Olvidé contraseña" />
 	</form>
 </div>
 <div id="alojantedata">
