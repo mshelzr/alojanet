@@ -132,6 +132,7 @@ public class LoginAction extends ActionSupport {
 			resp.addCookie(c);
 		}
 		
+		//replaced session by a cookie
 //		Map<String,Object> sesion=ActionContext.getContext().getSession();
 //		sesion.remove("s_usuario");
 //		sesion.remove("s_menu");
