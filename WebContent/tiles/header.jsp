@@ -41,7 +41,7 @@
 							<label class="sr-only" for="exampleInputEmail2">Email
 								address</label> <input type="email" name="username"
 								class="form-control input-sm" id="username"
-								placeholder="Enter email">
+								placeholder="Enter user or email">
 						</div>
 						<div class="form-group">
 							<label class="sr-only" for="exampleInputPassword2">Password</label>
