@@ -6,16 +6,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<sj:head jqueryui="true" jquerytheme="trontastic" locale="es" />
 <title><tiles:insertAttribute name="title" ignore="true" /></title>
 
-<link rel="stylesheet" type="text/css"
-	href="../resources/css/bootstrap.min.css">
+<sj:head jqueryui="true" jquerytheme="le-frog" locale="es"/>
+<link rel="stylesheet" type="text/css" href="../resources/css/bootstrap.min.css">
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="../resources/css/jquery.ui.all.css">
 <script type="text/javascript" src="../resources/js/jquery-ui.js"></script>
+<script type="text/javascript" src="../resources/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="../resources/js/bootstrap-modalmanager.js"></script>
 <script type="text/javascript" src="../resources/js/main.js"></script>
+<link rel="stylesheet" type="text/css" href="../resources/css/bootstrap-modal.css">
+<link rel="stylesheet" type="text/css" href="../resources/css/bootstrap-modal-bs3patch.css">
 <link rel="stylesheet" type="text/css" href="../resources/css/main.css">
+<script type="text/javascript" src="../resources/js/bootstrap-datepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="../resources/css/datepicker.css">
 </head>
 <body>
 	<div class="wrapper">

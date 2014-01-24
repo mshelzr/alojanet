@@ -65,3 +65,43 @@ footer a:hover {
 	margin-top: 15px;
 	background-position: 0 -115px;
 }
+
+/* this begin*/
+.thumbnail.sinRaya,.thumbnail.panel-footer.btnEscogerHab {
+text-decoration: none;
+}
+
+.btn.btn-default.btn-lg {
+float: right;
+padding: 28px 28px 28px 28px;
+}
+
+/* reserva convencional */
+.listConScroll{
+    max-height: 300px;
+    overflow-y:scroll; 
+}
+
+/* cs bootstrap */
+.bs-callout {
+margin: auto;
+padding: 20px;
+border-left: 3px solid #eee;
+}
+.bs-callout-danger {
+background-color: #fdf7f7;
+border-color: #eed3d7;
+}
+.bs-callout-danger h4 {
+color: #b94a48;
+}
+
+/*checkin */
+.tamanoModalAcompCheckin {
+   width: 800px;
+}
+
+/*  */
+.divParaModificarInputs{
+background-color:#4f9fcf;
+}

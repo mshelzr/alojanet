@@ -3,7 +3,7 @@
 <%@ page import="com.google.gson.Gson"%>
 <%@ page import="com.google.gson.reflect.TypeToken"%>
 <%@ page import="java.util.List"%>
-<%@ page import="pe.libertadores.alojamiento.dto.MenuDTO"%>
+<%@ page import="pe.libertadores.dto.MenuDTO"%>
 
 <div class="panel-group" id="panel-679024">
 	<div class="panel panel-default">
@@ -29,7 +29,6 @@
 								}.getType());
 						for (MenuDTO mp : listMenuPadre) {
 			%>
-			<%-- 			<c:forEach var="p" items="${s_menuPadre}"> --%>
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<a class="panel-title" data-toggle="collapse"
@@ -62,7 +61,6 @@
 			<%
 				}
 			%>
-			<%-- 			</c:forEach> --%>
 		</c:when>
 		<c:otherwise>
 			<div class="panel panel-default">

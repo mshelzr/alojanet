@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+		<typeAlias alias="usuarioMybatis" type="pe.libertadores.dto.UsuarioDTO" />
+		<typeAlias alias="tipoDocumentoMybatis" type="pe.libertadores.dto.TipoDocumentoDTO" />
+		<typeAlias alias="menuMybatis" type="pe.libertadores.dto.MenuDTO" />
+		<typeAlias alias="perfilMybatis" type="pe.libertadores.dto.PerfilDTO" />
+		<typeAlias alias="personaMybatis" type="pe.libertadores.dto.PersonaDTO" />
+		<typeAlias alias="ambienteMybatis" type="pe.libertadores.dto.AmbienteDTO" />
+		<typeAlias alias="detalleReservaMybatis" type="pe.libertadores.dto.DetalleReservaDTO" />
+		<typeAlias alias="reservaMybatis" type="pe.libertadores.dto.ReservaDTO" />		
+		<typeAlias alias="clienteMybatis" type="pe.libertadores.dto.ClienteDTO" />
+		<typeAlias alias="acompananteReservaMybatis" type="pe.libertadores.dto.AcompananteReservaDTO" />
+		<typeAlias alias="personaTarjetaMybatis" type="pe.libertadores.dto.PersonaTarjetaDTO" />
+	</typeAliases> 
+
+	<environments default="development">
+		<environment id="development">
+		
+			<transactionManager type="JDBC" />
+			
+			<dataSource type="UNPOOLED">
+						<property name="driver" value="com.mysql.jdbc.Driver" />
+						<property name="url" value="jdbc:mysql://localhost:3306/alojamientodb" />
+						<property name="username" value="root" />
+						<property name="password" value="mysql" />
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<!--  Registro de los mappers  -->
+	<mappers>
+		<mapper resource="mybatis/mapper.xml" />
+	</mappers>
+</configuration>
+

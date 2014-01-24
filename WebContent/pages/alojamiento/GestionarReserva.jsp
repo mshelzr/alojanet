@@ -1,556 +1,347 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
-<%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!-- Situación del tipo de actor-->
-<label style="color: red">Actor:</label>
-<select id="opcionActor" onchange="cambiarPorTipoDeActor();">
-	<option value="1">Recepcionista</option>
-	<option value="2">Cliente</option>
-</select>
+<input type="hidden" id="flagPagGestionar" value="true" />
 
-<h2>Gestionar Reserva</h2>
-<fieldset id="busquedaPorRecepcionista">
-	<legend>Buscar reserva: </legend>
-	<br />
-	<div id="partSearched" style="display: none">
-		<label>Num de Reserva: </label> <input type="text" value="1"
-			disabled="disabled" />
-	</div>
-	<div id="partBuscarReserva">
-		<label>Num de Reserva: </label> <input type="text" /> <label>Buscar
-			por:</label> <select id="tipoPersonaBusqueda"
-			onchange="cambiarPorTipoDeBusqueda();">
-			<option value="persona">Persona</option>
-			<option value="empresa">Empresa</option>
-		</select><br />
-		<!-- 	persona -->
-		<div id="bpersona">
-			<label class="bpersona">Nombre o apellido:</label>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label class="bpersona">Número
-				de documento:</label> <br />
+<c:if test="${cookie.idPerfil.value ne 1}">
+	<div class="row panel-busqueda">
+	<!-- row de busqueda -->
+	<legend class="text-primary">
+		Busqueda de reserva <span class="glyphicon glyphicon-search"></span>
+	</legend>
+	<div class="col-xs-4">
+		<div class="input-group">
+			<span class="input-group-addon">Nº Reserva </span> <input type="text"
+				class="form-control input-sm" id="idReservaInput"> <span
+				class="input-group-addon"> <a data-toggle="modal" href="#"
+				id="btnBuscarByIdReserva" class="btnModalSearched"> <span
+					class="glyphicon glyphicon-search"></span></a>
+			</span>
 		</div>
-		<div id="bempresa" style="display: none">
-			<!-- 	empresa -->
-			<label class="bempresa">Razón social:</label>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<label class="bempresa">Ruc:</label> <br />
+		<!-- /input-group -->
+	</div>
+	<!-- /.col-lg- -->
+	<div class="col-xs-4">
+		<div class="input-group">
+			<span class="input-group-btn"> <select class="input-sm"
+				id="comboNombreSelect">
+					<option value="apellido">Apellido</option>
+					<option value="razonsocial">Empresa</option>
+			</select>
+			</span> <input type="text" class="form-control input-sm"
+				id="nombresBuscarInput" /> <span class="input-group-addon">
+				<a data-toggle="modal" href="#" id="btnBuscarByNombres"
+				class="btnModalSearched"> <span
+					class="glyphicon glyphicon-search"></span></a>
+			</span>
 		</div>
-		<input type="text" id="nombres" /> <input type="text" /> <input
-			type="button" value="Buscar" id="evaluarObjBuscado" /> <br />
+		<!-- /input-group -->
 	</div>
-	<div id="clienteNoEncontrado" style="display: none">
-		<label>No se encontraron resultados. </label> <br />
+	<!-- /.col-lg- -->
+	<div class="col-xs-4">
+		<div class="input-group">
+			<span class="input-group-btn"> <select class="input-sm"
+				id="comboDocSelect">
+					<option value="dni">DNI</option>
+					<option value="pasa" title="Pasaporte">PASA</option>
+					<option value="ruc">RUC</option>
+			</select>
+			</span> <input type="text" class="form-control input-sm" id="docBuscarInput" />
+			<span class="input-group-addon"> <a data-toggle="modal"
+				href="#" id="btnBuscarByNumDocumento" class="btnModalSearched">
+					<span class="glyphicon glyphicon-search"></span>
+			</a>
+			</span>
+		</div>
+		<!-- /input-group -->
 	</div>
-	<br />
-	<div id="clientesEncontrados" style="display: none">
-		<label>Resultado de la busqueda:</label> <br />
-		<table border="1" id="pool" tabindex='1'>
-			<tr>
-				<th>Sel.</th>
-				<th width="130">Nº Reserva</th>
-				<th width="130">Persona</th>
-				<th width="130">Documento</th>
-			</tr>
-			<tr>
-				<td><input type="radio" name="searched"
-					class="searchedGestionar"
-					title="Se carga los datos de serva de los clientes buscados" /></td>
-				<td>0001</td>
-				<td>Rosita Garcia Davila</td>
-				<td>44852412</td>
-			</tr>
-			<tr>
-				<td><input type="radio" name="searched"
-					class="searchedGestionar"
-					title="Se carga los datos de serva de los clientes buscados" /></td>
-				<td>0006</td>
-				<td>Roberto Garcia Santos</td>
-				<td>44852412</td>
-			</tr>
+	<!-- /.col-lg- -->
+</div>
+<!-- /.row busqueda-->
+</c:if>
+<div class="modal fade" id="modalSearched" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"
+			aria-hidden="true">&times;</button>
+		<h4 class="modal-title">Resultado de busqueda</h4>
+	</div>
+	<div class="modal-body">
+
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Sel.</th>
+					<th>Nº Reserva</th>
+					<th>Persona</th>
+					<th>Documento</th>
+				</tr>
+			</thead>
+			<tbody id="rowReservaSearched">
+
+			</tbody>
 		</table>
 	</div>
-</fieldset>
-
-<div id="gestionarReserva" style="display: none">
-	<form>
-		<fieldset>
-			<legend>-</legend>
-			<br />
-			<table border="1" id="pool" tabindex='1'>
-				<tr>
-					<th>Foto</th>
-					<th width="130">Ambiente</th>
-					<th width="130">Inicio</th>
-					<th width="130">Fin</th>
-					<th>Estado</th>
-					<th>Modif.</th>
-
-				</tr>
-				<tr>
-					<td><img alt="hotel2" src="../resources/img/hotel1.jpg" width="50"
-						height="35"
-						title="Nota Interna: Al darle click muestra una imagen panoramica"></td>
-					<td>C003/H301</td>
-					<td>02/11/2013</td>
-					<td>22/12/2013</td>
-					<td><img src="../resources/img/online_rs.PNG" title="Activado"></td>
-					<td><a href="javascript:void(0);"
-						class="modificarReservaGestionarReserva"><img alt=""
-							src="../resources/img/ico_update.gif"></a></td>
-				</tr>
-				<tr>
-					<td><img alt="hotel2" src="../resources/img/hotel2.jpg" width="50"
-						height="35"
-						title="Nota Interna Al darle click muestra una imagen panoramica"></td>
-					<td>C003/H301</td>
-					<td>02/11/2013</td>
-					<td>22/12/2013</td>
-					<td><a href="javascript:void(0);"><img
-							src="../resources/img/ico_delete.PNG" title="Activación pendiente"
-							onclick="confirm('¿Está seguro que desea eliminar la reserva?');" /></a></td>
-					<td><a href="javascript:void(0);"
-						class="modificarReservaGestionarReserva"><img alt=""
-							src="../resources/img/ico_update.gif"></a></td>
-
-				</tr>
-				<tr>
-					<td><img alt="hotel2" src="../resources/img/hotel3.jpg" width="50"
-						height="35"
-						title="Nota Interna: Al darle click muestra una imagen panoramica"></td>
-					<td>C003/H302</td>
-					<td>02/11/2013</td>
-					<td>22/12/2013</td>
-					<td><img src="../resources/img/online_rs.PNG" title="Activado" /></td>
-					<td><a href="javascript:void(0);"
-						class="modificarReservaGestionarReserva"><img alt=""
-							src="../resources/img/ico_update.gif"></a></td>
-				</tr>
-				<tr>
-					<td><img alt="hotel2" src="../resources/img/hotel1.jpg" width="50"
-						height="35"
-						title="To ECU: Al darle click muestra una imagen panoramica"></td>
-					<td>C003/H303</td>
-					<td>02/11/2013</td>
-					<td>22/12/2013</td>
-					<td><a href="javascript:void(0);"><img
-							src="../resources/img/ico_delete.PNG" title="Activación pendiente"
-							onclick="confirm('¿Está seguro que desea eliminar la reserva?');" /></a></td>
-					<td><a href="javascript:void(0);"
-						class="modificarReservaGestionarReserva"><img alt=""
-							src="../resources/img/ico_update.gif"></a></td>
-
-				</tr>
-			</table>
-		</fieldset>
-		<br /> <input type="button" value="+ Agregar nueva reserva"
-			id="agregarNuevaReserva" />
-		<!-- Regresar -->
-		<s:url id="category" action="Reserva.action" var="reserva">
-			<s:param name="gojsp"></s:param>
-		</s:url>
-		<input type="button" value="Regresar"
-			onclick="location.href='<s:property value="#reserva" />'" />
-	</form>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+		<!--<button type="button" class="btn btn-primary">Save changes</button> -->
+	</div>
 </div>
-<!--  DIALOG -->
-<div id="agregarReserva">
-	<sj:tabbedpanel id="localtabs" cssClass="list" title="Reserva"
-		label="Reserva">
-		<sj:tab id="tab1" target="tone" label="Cabana" />
-		<sj:tab id="tab2" target="ttwo" label="Centro de Convenciones" />
-		<sj:tab id="tab3" target="tthree" label="Ambientes" />
-		<!-- 		DIV-UNO -->
-		<form name="formReserva">
-			<div id="tone">
 
-				<fieldset id="fsreservahotel">
-					<legend>Reservar Habitacion</legend>
-					<label>F. Inicio</label>
-					<sj:datepicker size="18" id="idFechaInitHotel" timepicker="true"
-						displayFormat="yy-mm-dd" showButtonPanel="true" showOn="button" />
-					<label>F. Fin</label>
-					<sj:datepicker size="18" id="idFechaEndHotel" timepicker="true"
-						displayFormat="yy-mm-dd" showButtonPanel="true" showOn="button" />
-					<label>Con Minibar: </label> <input type="checkbox" /> <input
-						id="btnCargarCabanas" value="Buscar" type="button" /> <br /> <br />
-					<div id="cargarCabanas" style="display: none">
-						<table border="1">
-							<caption>Seleccione la Cabana</caption>
-							<tr>
-								<th>Sel.</th>
-								<th width="60">Foto</th>
-								<th width="130">Número</th>
-								<th width="130">Cant Habitaciones</th>
-							</tr>
-							<tr>
-								<td><input type="radio" name="numcabana"
-									class="linkCargarCabanas" /></td>
-								<td><img alt="cabana1" src="../resources/img/cabana1.jpg"></td>
-								<td>C001</td>
-								<td>50</td>
-							</tr>
-							<tr>
-								<td><input type="radio" name="numcabana"
-									class="linkCargarCabanas" /></td>
-								<td><img alt="cabana2" src="../resources/img/cabana2.jpg"></td>
-								<td>C002</td>
-								<td>49</td>
-							</tr>
-						</table>
-					</div>
-					<div id="cargarHabitaciones" style="display: none">
-						<table border="1">
-							<caption>Seleccione la habitacion</caption>
-							<tr>
-								<th>Sel.</th>
-								<th width="60">Foto</th>
-								<th width="130">#Cabana</th>
-								<th width="130">#Habitaciones</th>
-								<th>Precio</th>
-							</tr>
-							<tr>
-								<td><input type="radio" name="numhabitacion"
-									class="linkCargarAcompanantesGS" /></td>
-								<td><img alt="hotel1" src="../resources/img/hotel1.jpg"></td>
-								<td>C001</td>
-								<td>3</td>
-								<td>S/. 300</td>
-							</tr>
-							<tr>
-								<td><input type="radio" name="numhabitacion"
-									class="linkCargarAcompanantesGS" /></td>
-								<td><img alt="hotel2" src="../resources/img/hotel2.jpg"></td>
-								<td>C001</td>
-								<td>4</td>
-								<td>S/. 400</td>
-							</tr>
-							<tr>
-								<td><input type="radio" name="numhabitacion"
-									class="linkCargarAcompanantesGS" /></td>
-								<td><img alt="hotel3" src="../resources/img/hotel3.jpg"></td>
-								<td>C001</td>
-								<td>4</td>
-								<td>S/. 500</td>
-							</tr>
-						</table>
-					</div>
-					<div id="cargarAcompanantes" style="display: none">
-						<br /> <br /> <label>Acompanante: </label> <br /> <br /> <label>Nombre
-							completo: </label> <input type="text" size="40" />&nbsp;&nbsp;&nbsp;<input
-							type="checkbox" name="habitacion" /><label>Incluirme</label> <br />
-						<label>Tipo de Documento: </label> <select>
-							<option>DNI</option>
-							<option>Pasaporte</option>
-						</select> <label>Num Documento: </label> <input type="text" /> <input
-							type="button" value="Agregar" /> <br />
-						<br />
-						<table border="1">
-							<tr>
-								<th width="130">Nombre Completo</th>
-								<th width="130">Documento</th>
-								<th width="130">NumDocumento</th>
-								<th>Mod.</th>
-								<th>Elim.</th>
-							</tr>
-							<tr>
-								<td>Gregorio Santos</td>
-								<td>DNI</td>
-								<td>44666444</td>
-								<td><a href="javascript:void(0);"><img alt=""
-										src="../resources/img/ico_update.gif"></a></td>
-								<td><a href="javascript:void(0);"
-									onclick="confirm('¿Está seguro que desea eliminar la reserva?');"><img
-										alt="" src="../resources/img/ico_delete.PNG"></a></td>
-							</tr>
-							<tr>
-								<td>Oliver Atom</td>
-								<td>Pasaporte</td>
-								<td>1044666444</td>
-								<td><a href="javascript:void(0);"><img alt=""
-										src="../resources/img/ico_update.gif"></a></td>
-								<td><a href="javascript:void(0);"
-									onclick="confirm('¿Está seguro que desea eliminar la reserva?');"><img
-										alt="" src="../resources/img/ico_delete.PNG"></a></td>
-							</tr>
-							<tr>
-								<td>...</td>
-								<td>...</td>
-								<td>...</td>
-								<td><a href="javascript:void(0);"><img alt=""
-										src="../resources/img/ico_update.gif"></a></td>
-								<td><a href="javascript:void(0);"
-									onclick="confirm('¿Está seguro que desea eliminar la reserva?');"><img
-										alt="" src="../resources/img/ico_delete.PNG"></a></td>
-							</tr>
-						</table>
-					</div>
-					<br />
-				</fieldset>
-			</div>
-		</form>
-		<!-- 		DIV: NUMERO DOS -->
-		<div id="ttwo">
-			<form>
-				<fieldset id="fsreservacentrorecreacional">
-					<legend>Reservar Centro de Convenciones</legend>
-					<label>Inicio</label>
-					<sj:datepicker id="idFechaInitCentroRecreacional" timepicker="true"
-						displayFormat="yy-mm-dd" showButtonPanel="true" showOn="button" />
-					<label>Fin</label>
-					<sj:datepicker id="idFechaEndCentroRecreacional" timepicker="true"
-						displayFormat="yy-mm-dd" showButtonPanel="true" showOn="button" />
-					<input type="button" value="Buscar" id="btnBuscarCabanasRecreacion" />
-					<br /> <br />
-					<div id="cargarCabanasRecreacion" style="display: none">
-						<table border="1">
-							<tr>
-								<th>Sel.</th>
-								<th width="60">Foto</th>
-								<th width="130">Descripcion</th>
-								<th width="130">Aforo</th>
-								<th width="130">Cant. Asientos VIP</th>
-								<th>Precio</th>
-							</tr>
-							<tr>
-								<td><input type="radio" name="numhabitacion"
-									class="linkCargarAcompanantesCabanaGS" /></td>
-								<td><img alt="cabana1"
-									src="../resources/img/centro-convenciones.jpg"></td>
-								<td>Centro Recreacional</td>
-								<td>150</td>
-								<td>15</td>
-								<td>S/. 1300</td>
-							</tr>
-						</table>
-					</div>
-					<div id="cargarAcompanantesRecreacion" style="display: none">
-						<br /> <br /> <label>Acompanante: </label> <br /> <br /> <label>Nombre
-							completo: </label> <input type="text" size="40" /> &nbsp;&nbsp;&nbsp;<input
-							type="checkbox" /> <label>Incluir a Asiento VIP</label><br /> <label>Tipo
-							de Documento: </label> <select>
-							<option>DNI</option>
-							<option>Pasaporte</option>
-						</select> <label>Num Documento: </label> <input type="text" /> <input
-							type="button" value="Agregar" /> <br />
-						<br />
-						<table border="1">
-							<tr>
-								<th width="130">Nombre Completo</th>
-								<th width="130">Documento</th>
-								<th width="130">NumDocumento</th>
-								<th>Mod.</th>
-								<th>Elim.</th>
-							</tr>
-							<tr>
-								<td>Gregorio Santos</td>
-								<td>DNI</td>
-								<td>44666444</td>
-								<td><img alt="" src="../resources/img/ico_update.gif"></td>
-								<td><img alt="" src="../resources/img/ico_delete.PNG"
-									onclick="confirm('¿Está seguro que desea eliminar la reserva?');"></td>
-							</tr>
-							<tr>
-								<td>Oliver Atom</td>
-								<td>Pasaporte</td>
-								<td>1044666444</td>
-								<td><img alt="" src="../resources/img/ico_update.gif"></td>
-								<td><img alt="" src="../resources/img/ico_delete.PNG"
-									onclick="confirm('¿Está seguro que desea eliminar la reserva?');"></td>
-							</tr>
-							<tr>
-								<td>...</td>
-								<td>...</td>
-								<td>...</td>
-								<td><img alt="" src="../resources/img/ico_update.gif"></td>
-								<td><img alt="" src="../resources/img/ico_delete.PNG"></td>
-							</tr>
-						</table>
-					</div>
-				</fieldset>
-			</form>
+<div class="panel-group panel-cabs-searched panel-reserva-encontrada hidden"
+	id="panel-1">
+	<legend class="text-primary">
+		Gestión de Reserva <span class="glyphicon glyphicon-lock"></span>
+	</legend>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a class="panel-title" data-toggle="collapse"
+				data-parent="#panel-1" href="#panel-element-0">Reserva
+				 <span class="glyphicon glyphicon-tasks"></span>
+			</a>
 		</div>
-		<!-- 		DIV -TRES				 -->
-		<div id="tthree">
-			<form>
-				<p>
-					<b>Aviso:</b> Para poner reservar un <b>ambiente</b> necesitas
-					haber reservado una <b>cabana</b>
-				</p>
-				<fieldset id="fsambiente" tabindex="1">
-					<legend>Reservar Ambiente</legend>
-					<label>Inicio</label>
-					<sj:datepicker id="idFechaInitAmbiente" timepicker="true"
-						displayFormat="yy-mm-dd" showButtonPanel="true" showOn="button" />
-					<label>Fin</label>
-					<sj:datepicker id="idFechaEndAmbiente" timepicker="true"
-						displayFormat="yy-mm-dd" showButtonPanel="true" showOn="button" />
-					<input type="button" value="Buscar" id="btnBuscarCabanasAmbiente" />
-					<br /> <br />
-					<div id="cargarCabanasAmbiente" style="display: none">
-						<table border="1">
-							<tr>
-								<th>Sel.</th>
-								<th width="60">Foto</th>
-								<th width="130">Número</th>
-								<th width="130">Máximo de Personas</th>
-								<th>Precio</th>
-							</tr>
-							<tr>
-								<td><input type="radio" name="numhabitacion"
-									class="linkCargarBtnGuardarCambiosGS" /></td>
-								<td><img alt="cabana1" src="../resources/img/ambiente1.jpg"></td>
-								<td>C001</td>
-								<td>100</td>
-								<td>S/. 1100</td>
-							</tr>
-							<tr>
-								<td><input type="radio" name="numhabitacion"
-									class="linkCargarBtnGuardarCambiosGS" /></td>
-								<td><img alt="cabana2" src="../resources/img/ambiente2.jpg"></td>
-								<td>C002</td>
-								<td>120</td>
-								<td>S/. 1200</td>
-							</tr>
-						</table>
+		<div id="panel-element-0" class="panel-collapse collapse in" >
+			<div class="panel-body">
+				<br />
+				<div class="row">
+					<div class="col-xs-5">
+						<div class="input-group input-group-lg">
+							<span class="input-group-addon">Código de la reserva</span> <input
+								type="text" class="form-control" id="lblIdReserva" value="${m}" disabled />
+						</div>
 					</div>
-					<br />
-				</fieldset>
-			</form>
-		</div>
-		<input type="reset" value="Reservar" id="btnAgregarReservaGS"
-			style="display: none" />
-	</sj:tabbedpanel>
-</div>
-<!-- MODIFICAR -->
-<div id="modificarReserva">
-	<sj:tabbedpanel id="localtabsB" cssClass="list" title="Reserva"
-		label="Reserva">
-		<form name="formReservaB">
-			<fieldset id="fsreservahotelB">
-				<legend>Modificar Reserva</legend>
-				<label>F. Inicio</label>
-				<sj:datepicker size="18" id="idFechaInitHotelB" timepicker="true"
-					displayFormat="yy-mm-dd" value="02/11/2013" showButtonPanel="true"
-					showOn="button" />
-				<label>F. Fin</label>
-				<sj:datepicker size="18" id="idFechaEndHotelB" timepicker="true"
-					displayFormat="yy-mm-dd" value="22/12/2013" showButtonPanel="true"
-					showOn="button" />
-				<label>Con Minibar: </label> <input type="checkbox" /> <input
-					value="Buscar" type="button" /> <br /> <br />
-				<div id="cargarCabanasB">
-					<table border="1">
-						<caption>Seleccione la Cabana</caption>
-						<tr>
-							<th>Sel.</th>
-							<th width="60">Foto</th>
-							<th width="130">Número</th>
-							<th width="130">Cant Habitaciones</th>
-						</tr>
-						<tr>
-							<td><input type="radio" name="numcabana" checked="checked" /></td>
-							<td><img alt="cabana1" src="../resources/img/cabana1.jpg"
-								width="50" height="50"></td>
-							<td>C001</td>
-							<td>50</td>
-						</tr>
-						<tr>
-							<td><input type="radio" name="numcabana" /></td>
-							<td><img alt="cabana2" src="../resources/img/cabana2.jpg"
-								width="50" height="50"></td>
-							<td>C002</td>
-							<td>49</td>
-						</tr>
-					</table>
-				</div>
-				<div id="cargarHabitacionesB">
-					<table border="1">
-						<caption>Seleccione la habitacion</caption>
-						<tr>
-							<th>Sel.</th>
-							<th width="60">Foto</th>
-							<th width="130">#Cabana</th>
-							<th width="130">#Habitaciones</th>
-							<th>Precio</th>
-						</tr>
-						<tr>
-							<td><input type="radio" name="numhabitacion" /></td>
-							<td><img alt="hotel1" src="../resources/img/hotel1.jpg" width="50"
-								height="50"></td>
-							<td>C001</td>
-							<td>3</td>
-							<td>S/. 400</td>
-						</tr>
-						<tr>
-							<td><input type="radio" name="numhabitacion"
-								checked="checked" /></td>
-							<td><img alt="hotel2" src="../resources/img/hotel2.jpg" width="50"
-								height="50"></td>
-							<td>C001</td>
-							<td>4</td>
-							<td>S/. 200</td>
-						</tr>
-						<tr>
-							<td><input type="radio" name="numhabitacion" /></td>
-							<td><img alt="hotel3" src="../resources/img/hotel3.jpg" width="50"
-								height="50"></td>
-							<td>C001</td>
-							<td>4</td>
-							<td>S/. 300</td>
-						</tr>
-					</table>
-				</div>
-				<div id="cargarAcompanantesB">
-					<br /> <br /> <label>Acompañante: </label> <br /> <br /> <label>Nombre
-						completo: </label> <input type="text" size="40" />&nbsp;&nbsp;&nbsp;<input
-						type="checkbox" name="habitacion" /><label>Incluirme</label> <br />
-					<label>Tipo de Documento: </label> <select>
-						<option>DNI</option>
-						<option>Pasaporte</option>
-					</select> <label>Num Documento: </label> <input type="text" /> <input
-						type="button" value="Agregar" /> <br /> <br />
-					<table border="1">
-						<tr>
-							<th width="130">Nombre Completo</th>
-							<th width="130">Documento</th>
-							<th width="130">NumDocumento</th>
-							<th>Mod.</th>
-							<th>Elim.</th>
-						</tr>
-						<tr>
-							<td>Gregorio Santos</td>
-							<td>DNI</td>
-							<td>44666444</td>
-							<td><a href="javascript:void(0);"><img alt=""
-									src="../resources/img/ico_update.gif"></a></td>
-							<td><a href="javascript:void(0);"><img alt=""
-									src="../resources/img/ico_delete.PNG"></a></td>
-						</tr>
-						<tr>
-							<td>Oliver Atom</td>
-							<td>Pasaporte</td>
-							<td>1044666444</td>
-							<td><a href="javascript:void(0);"><img alt=""
-									src="../resources/img/ico_update.gif"></a></td>
-							<td><a href="javascript:void(0);"><img alt=""
-									src="../resources/img/ico_delete.PNG"></a></td>
-						</tr>
-						<tr>
-							<td>...</td>
-							<td>...</td>
-							<td>...</td>
-							<td><a href="javascript:void(0);"><img alt=""
-									src="../resources/img/ico_update.gif"></a></td>
-							<td><a href="javascript:void(0);"><img alt=""
-									src="../resources/img/ico_delete.PNG"></a></td>
-						</tr>
-					</table>
 				</div>
 				<br />
-			</fieldset>
-		</form>
-		<input type="reset" value="Grabar" id="btnGuardarCambiosB" />
-	</sj:tabbedpanel>
+				<table class="table table-hover">
+					<legend class="text-primary">
+						Datos de la reserva <span class="glyphicon glyphicon-list-alt"></span>
+					</legend>
+					<thead>
+						<tr>
+							<th>Nº Ambiente</th>
+							<th><span class="glyphicon glyphicon-user"></span> Actual</th>
+							<th>F. Inicio</th>
+							<th>F. Fin</th>
+							<th>Info.</th>
+							<th>Estado.</th>
+						</tr>
+					</thead>
+					<tbody id="rowDetalleReserva">				
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-4 modal-footer">
+			<a type="button" class="btn btn-primary" href="agregarReserva.action">Agregar
+				nueva reserva</a> <a type="button" class="btn btn-default"
+				href="gestionarReserva.action">Atrás</a>
+		</div>
+	</div>
+  </div>
+
+<c:if test="${cookie.idPerfil.value eq 1}">
+<div class="panel-group panel-cabs-searched panel-reserva-encontrada"
+	id="panel-2">
+	<legend class="text-primary">
+		Gestión de Reserva <span class="glyphicon glyphicon-lock"></span>
+	</legend>	
+	<c:forEach items="${count}" var="m" varStatus="status">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a class="panel-title" data-toggle="collapse"
+				data-parent="#panel-2" href="#panel-element-${status.count}">Reserva
+				# ${status.count} <span class="glyphicon glyphicon-tasks"></span>
+			</a>
+		</div>
+		<div id="panel-element-${status.count}" class="panel-collapse collapse <c:if test="${status.index eq 0}">in</c:if>" >
+			<div class="panel-body">
+				<br />
+				<div class="row">
+					<div class="col-xs-5">
+						<div class="input-group input-group-lg">
+							<span class="input-group-addon">Código de la reserva</span> <input
+								type="text" class="form-control" id="lblIdReserva" value="${m}" disabled />
+						</div>
+					</div>
+				</div>
+				<br />
+				<table class="table table-hover">
+					<legend class="text-primary">
+						Datos de la reserva <span class="glyphicon glyphicon-list-alt"></span>
+					</legend>
+					<thead>
+						<tr>
+							<th>Nº Ambiente</th>
+							<th><span class="glyphicon glyphicon-user"></span> Actual</th>
+							<th>F. Inicio</th>
+							<th>F. Fin</th>
+							<th>Info.</th>
+							<th>Estado.</th>
+						</tr>
+					</thead>
+					<tbody id="rowDetalleReserva">				
+						<c:forEach items="${listaReservas}" var="n">
+							<!-- idreserva, idDetalleReserva, numberoLocal, cabLocal, habLocal,count,acomps,fec_inicio,fec_fin,estado -->
+							<c:if test="${n.idreserva eq m }">
+								<tr>
+									<td>${n.cabLocal}/${n.habLocal}</td>
+									<td>${n.count}/${n.acomps}</td>
+									<td>${n.fec_inicio}</td>
+									<td>${n.fec_fin}</td>
+									<td><a class="btnModalDetalleReserva" data-toggle="modal" href="#" data-action="${n.idDetalleReserva}"><span
+											class="glyphicon glyphicon-eye-open"></span></a></td>
+									<td>${n.estado}</td>
+								</tr>
+							</c:if>
+						</c:forEach>
+						</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	</c:forEach>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-4 modal-footer">
+			<a type="button" class="btn btn-primary" href="agregarReserva.action">Agregar
+				nueva reserva</a> <a type="button" class="btn btn-default"
+				href="gestionarReserva.action">Atrás</a>
+		</div>
+	</div> <!-- btns footer-->
+  </div>
+</c:if>
+<!-- MODAL DETALL_RESERVA -->
+<div class="modal fade" id="modalDetalleReserva" tabindex="1"
+	role="dialog" data-width="760" aria-labelledby="myModalLabel"
+	aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"
+			aria-hidden="true">&times;</button>
+		<h4 class="modal-title">Detalle de la reserva</h4>
+	</div>
+	<div class="modal-body">
+		<!-- cuerpo del modal -->
+		<table>
+			<tr>
+				<td>
+					<div class="input-group date " id="e" data-date="16-01-2014"
+						data-date-format="dd-mm-yyyy">
+						<span class="input-group-addon">Desde</span> <input
+							class="form-control input-sm" id="lblDesde" type="text" /> <span
+							class="input-group-addon"><i
+							class="glyphicon glyphicon-calendar"></i></span>
+					</div>
+				</td>
+				<td>
+					<div class="input-group date " id="e2" data-date="16-02-2014"
+						data-date-format="dd-mm-yyyy">
+						<span class="input-group-addon">Hasta</span> <input
+							class="form-control input-sm" type="text" id="lblHasta">
+						<span class="input-group-addon"><i
+							class="glyphicon glyphicon-calendar"></i></span>
+					</div>
+				</td>
+				<td>
+					<button type="button" class="btn btn-primary btn-sm active"
+						data-action="" id="btnConsultaDisponibilidad">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</td>
+				<td></td>
+				<td>
+					<div class="btn-success btn-sm hidden" id="bot-fec_disponible">
+						<span class="glyphicon glyphicon-ok"></span> Rango disponible
+					</div>
+					<div class="btn-danger btn-sm hidden" id="bot-fec_nondisponible">
+						<span class="glyphicon glyphicon-remove"></span> Rango Ocupado
+					</div>
+				</td>
+			</tr>
+		</table>
+		<br />
+
+		<legend class="text-primary">
+			Información de la Habitación <span
+				class="glyphicon glyphicon-list-alt"></span>
+		</legend>
+		<div class="media">
+			<a class="pull-left" href="#"> <img data-src="holder.js/300x200"
+				alt="300x200" style="width: 300px; height: 200px;"
+				src="data:image/png;base64,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">
+			</a>
+			<div class="media-body">
+				<h4 class="media-heading">Habitación:</h4>
+				<p id="lblHab"></p>
+				<h4 class="media-heading">
+					Scope <span class="glyphicon glyphicon-user"></span>:
+				</h4>
+				<p id="lblCapacidad"></p>
+				<h4 class="media-heading">Descripción:</h4>
+				<p id="lblDescripcion"></p>
+			</div>
+		</div>
+		<br /> <br />
+		<table class="table table-hover">
+			<legend class="text-primary">
+				Acompañantes <span class="glyphicon glyphicon-user"></span>
+			</legend>
+			<thead>
+				<tr>
+					<th>Nombres</th>
+					<th>A. Paterno</th>
+					<th>A. Materno</th>
+					<th>Documento</th>
+					<th>Nº</th>
+					<th>Mod.</th>
+					<th>Elim.</th>
+				</tr>
+			</thead>
+			<tbody id="contenerParaAgregarAcompCheckIn">
+
+			</tbody>
+		</table>
+		<!-- si hay espacio en la hab se muestra el agregar (con un poderoso if ()) -->
+		<div class="row hidden" id="panelAgregarAcompCheckIn">
+			<legend class="text-primary">
+				Agregar nuevo acompañante <span class="glyphicon glyphicon-plus"></span>
+				<span class="glyphicon glyphicon-user"></span>
+			</legend>
+			<div class="col-xs-3">
+				<input placeholder="Nombres" id="inputNombresAcomp"
+					class="form-control input-sm" type="text">
+			</div>
+
+			<div class="col-xs-2">
+
+				<input placeholder="A. Paterno" type="text"
+					class="form-control input-sm" id="inputApePaternoAcomp" size="6">
+			</div>
+			<div class="col-xs-2">
+
+				<input placeholder="A. Materno" type="text"
+					class="form-control input-sm" id="inputApeMaternoAcomp">
+			</div>
+			<div class="col-xs-5">
+				<div class="input-group">
+					<span class="input-group-btn"> <select class="input-sm"
+						id="inputTipoDocAcomp">
+							<option>DNI</option>
+							<option title="Pasaporte">PASA</option>
+					</select>
+					</span> <input placeholder="Número" type="text"
+						class="form-control input-sm" id="inputDocAcomp"> <span
+						class="input-group-addon"> <a href="javascript:void(0);"
+						id="btnAgregarAcomp"> <span class="glyphicon glyphicon-plus"></span>
+							<span class="glyphicon glyphicon-user"></span></a>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-danger" data-dismiss="modal"
+			id="btnSaveModalCheckIn">Guardar Cambios</button>
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+	</div>
 </div>

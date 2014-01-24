@@ -1,32 +1,42 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
+<jsp:useBean id="fechita" class="java.util.Date" />
 
 <%@ page import="com.google.gson.Gson"%>
 <%@ page import="com.google.gson.reflect.TypeToken"%>
 <%@ page import="java.util.List"%>
-<%@ page import="pe.libertadores.alojamiento.dto.MenuDTO"%>
+<%@ page import="pe.libertadores.dto.MenuDTO"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<sj:head jqueryui="true" jquerytheme="trontastic" locale="es" />
 <title><tiles:insertAttribute name="title" ignore="true" /></title>
 
-<link rel="stylesheet" type="text/css"
-	href="../resources/css/bootstrap.min.css">
+<sj:head jqueryui="true" jquerytheme="le-frog" locale="es"/>
+<!-- boostrap main-->
+<link rel="stylesheet" type="text/css" href="../resources/css/bootstrap.min.css">
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
+
+<!-- jquery ui -->
 <link rel="stylesheet" href="../resources/css/jquery.ui.all.css">
 <script type="text/javascript" src="../resources/js/jquery-ui.js"></script>
+
+<script type="text/javascript" src="../resources/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="../resources/js/bootstrap-modalmanager.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../resources/css/bootstrap-modal.css">
+<link rel="stylesheet" type="text/css" href="../resources/css/bootstrap-modal-bs3patch.css">
+
+<!-- main -->
 <script type="text/javascript" src="../resources/js/main.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="../resources/css/portal.css">
-<script type="text/javascript"
-	src="../resources/js/bootstrap-datepicker.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="../resources/css/datepicker.css">
+<link rel="stylesheet" type="text/css" href="../resources/css/portal.css">
+
+<!-- datepicker -->
+<script type="text/javascript" src="../resources/js/bootstrap-datepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="../resources/css/datepicker.css">
 </head>
 <body>
 	<div class="wrapper">
@@ -50,8 +60,7 @@
 								</tr>
 								<tr>
 									<td>
-										<div class="input-group date " id="e" data-date="12-02-2012"
-											data-date-format="mm-dd-yyyy">
+										<div class="input-group date " id="e" data-date-format="yyyy-mm-dd" >
 											<input class="form-control input-lg" type="text"
 												name="fInicio" placeholder="Desde"> <span
 												class="input-group-addon"><i
@@ -59,20 +68,19 @@
 										</div>
 									</td>
 									<td>
-										<div class="input-group date " id="e" data-date="12-02-2012"
-											data-date-format="mm-dd-yyyy">
+										<div class="input-group date " id="ee" data-date-format="yyyy-mm-dd" >
 											<input class="form-control input-lg" type="text" name="fFin"
 												placeholder="Hasta"> <span class="input-group-addon"><i
 												class="glyphicon glyphicon-calendar"></i></span>
 										</div>
 									</td>
-									<td><select class="form-control input-lg">
-											<option title="Centro recreacional">Recreación</option>
-											<option>Alojamiento</option>
-											<option title="Ambiente General.">Ambientes</option>
+									<td><select class="form-control input-lg" name="tpoAmb">
+											<option value="1" title="Centro recreacional">Alojamiento</option>
+											<option value="2" >Convencion</option>
+											<option value="3" title="Ambiente General.">Ambientes</option>
 									</select></td>
 									<td>
-										<button type="submit" class="btn btn-primary btn-lg active">
+										<button type="submit" class="btn btn-primary btn-lg">
 											Buscar <span class="glyphicon glyphicon-search"></span>
 										</button>
 									</td>

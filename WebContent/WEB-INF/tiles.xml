@@ -62,9 +62,14 @@
 
     <definition name="limpiaralojamientocamarera" extends="baseLayout">
         <put-attribute name="title" value="Limpiar Hab"/>
-        <put-attribute name="body" value="/pages/alojamiento/LimpiarAlojamientoCamarera.jsp"/>
+        <put-attribute name="body" value="/pages/alojamiento/ListaHabsPorLimpiarCam.jsp"/>
     </definition>
     
+   <definition name="habToLimpiar" extends="baseLayout">
+        <put-attribute name="title" value="Limpiar Hab"/>
+        <put-attribute name="body" value="/pages/alojamiento/LimpiarAlojamientoCamarera.jsp"/>
+    </definition>
+        
     <definition name="preverllegadadelalojante" extends="baseLayout">
         <put-attribute name="title" value="Consumido"/>
         <put-attribute name="body" value="/pages/alojamiento/PreverLlegadaDelAlojante.jsp"/>

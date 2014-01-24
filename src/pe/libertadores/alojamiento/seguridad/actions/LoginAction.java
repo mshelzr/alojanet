@@ -16,9 +16,11 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 
-import pe.libertadores.alojamiento.dto.MenuDTO;
-import pe.libertadores.alojamiento.dto.UsuarioDTO;
+import pe.libertadores.alojamiento.reserva.actions.MyUtil;
 import pe.libertadores.alojamiento.seguridad.dao.UsuarioDao;
+import pe.libertadores.dto.MenuDTO;
+import pe.libertadores.dto.PersonaDTO;
+import pe.libertadores.dto.UsuarioDTO;
 
 import com.google.gson.Gson;
 import com.opensymphony.xwork2.ActionSupport;
@@ -27,20 +29,28 @@ import com.opensymphony.xwork2.ActionSupport;
 public class LoginAction extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
-	private String user;
-	private String pwd;
 	private String mensaje;
+	
+	//registro
+	private String nombres;
+	private String apePaterno;
+	private String apeMaterno;
+	private String numDocumento;
+	private String direccion;
+	private int telf;
+	private String email;
 
 	private UsuarioDao usuarioDao=new UsuarioDao();
-
-	@Action(value = "/dialogLogueo", results = { @Result(name = "success", type = "json") })
-	public String validarUsuario(){
+	
+	@Action(value = "dialogLogueo", results = { @Result(name = "success", type = "json") })
+	public String dialogLogueo(){
+		
 		HttpServletRequest request = ServletActionContext.getRequest();
 		HttpServletResponse response= ServletActionContext.getResponse();
 		response.setContentType("text/html");
 		
-		String username=request.getParameter("username");
-		String password=request.getParameter("password");
+		String username=request.getParameter("user");
+		String password=request.getParameter("pwd");
 
 		UsuarioDTO usuarioDTO=new UsuarioDTO();
 		usuarioDTO.setUser(username);
@@ -50,39 +60,7 @@ public class LoginAction extends ActionSupport {
 		
 		if(usuarioDTO!=null){
 			if(usuarioDTO.getPwd().equals(password)){
-				List<MenuDTO> menuEmbebed=usuarioDao.listarMenuByIdPerfil(usuarioDTO.getIdPerfil());
-				List<MenuDTO> menuPadre = new ArrayList<MenuDTO>();
-				List<MenuDTO> menuHijo = new ArrayList<MenuDTO>();
-				for (MenuDTO m : menuEmbebed) {
-					if(m.getLvl()==1)
-						menuPadre.add(m);
-					else if(m.getLvl()>1)
-						menuHijo.add(m);
-				}
-				
-				Gson gs=new Gson();
-				String jsMenuPadre=gs.toJson(menuPadre);
-				String jsMenuHijo=gs.toJson(menuHijo);
-							
-				//cookies
-				Cookie idUsuario=new Cookie("idUsuario", Integer.toString(usuarioDTO.getIdUsuario()));
-				Cookie idPerfil=new Cookie("idPerfil",Integer.toString(usuarioDTO.getIdPerfil()));
-				Cookie menuPadreC=new Cookie("menuPadre",jsMenuPadre);
-				Cookie menuHijoC=new Cookie("menuHijo",jsMenuHijo);
-				
-				idUsuario.setMaxAge(60*60);
-				idPerfil.setMaxAge(60*60);
-				menuPadreC.setMaxAge(60*60);
-				menuHijoC.setMaxAge(60*60);
-				
-				response.addCookie(idUsuario);
-				response.addCookie(idPerfil);
-				response.addCookie(menuPadreC);
-				response.addCookie(menuHijoC);
-				
-//				sesion.put("s_usuario", usuarioDTO);
-//				sesion.put("s_menuPadre", menuPadre);
-//				sesion.put("s_menuHijo", menuHijo);
+				MyUtil.iniciarSesion(response, usuarioDTO.getUser());
 				
 				String url=request.getHeader("Referer");		    	
 				int desde=url.lastIndexOf("/");
@@ -123,7 +101,6 @@ public class LoginAction extends ActionSupport {
 		
 		resp.addCookie(idUsuario);
 		resp.addCookie(idPerfil);
-
 		Cookie[] cooks=req.getCookies();
 		
 		for (Cookie c : cooks) {
@@ -139,28 +116,73 @@ public class LoginAction extends ActionSupport {
 		return SUCCESS;
 	}
 
-	public String getUser() {
-		return user;
-	}
-
-	public void setUser(String user) {
-		this.user = user;
-	}
-
-	public String getPwd() {
-		return pwd;
-	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
-
+	@Action(value="registro",results={@Result(name="success",type="json")})
+	public String registro(){
+		
+		System.out.println(nombres);
+		System.out.println(apePaterno);
+		System.out.println(apeMaterno);
+		System.out.println(numDocumento);
+		System.out.println(direccion);
+		System.out.println(telf);
+		System.out.println(email);		
+				
+		PersonaDTO p=new PersonaDTO();
+		p.setNombres(nombres);
+		p.setApePaterno(apePaterno);
+		p.setApeMaterno(apeMaterno);
+		p.setNumDocumento(numDocumento);
+		p.setTelf(telf);
+		p.setEmail(email);		
+		
+		usuarioDao.registroPersonaUsuarioClienteWithPersona(p);
+		//cookies
+		HttpServletResponse response=ServletActionContext.getResponse();
+//		MyUtil.validarUsuarioUtil(response, user, pwd);
+		
+		Map<String,Object> resultMap=new HashMap<String,Object>();
+		resultMap.put("result", "success");
+		JSONObject js=JSONObject.fromObject(resultMap);
+		this.setMensaje(js.toString());
+		
+		
+		return SUCCESS;
+	}	
+	
 	public String getMensaje() {
 		return mensaje;
 	}
 
 	public void setMensaje(String mensaje) {
 		this.mensaje = mensaje;
+	}
+
+	public void setNombres(String nombres) {
+		this.nombres = nombres;
+	}
+
+	public void setApePaterno(String apePaterno) {
+		this.apePaterno = apePaterno;
+	}
+
+	public void setApeMaterno(String apeMaterno) {
+		this.apeMaterno = apeMaterno;
+	}
+
+	public void setNumDocumento(String numDocumento) {
+		this.numDocumento = numDocumento;
+	}
+
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public void setTelf(int telf) {
+		this.telf = telf;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 

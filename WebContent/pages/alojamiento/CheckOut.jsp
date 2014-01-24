@@ -1,169 +1,276 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
-<%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <jsp:useBean id="fechita" class="java.util.Date" />
-<h3>Formulario de Salida</h3>
-<br />
-<fieldset>
-	<legend>
-		<s:property value="message" />
-	</legend>
-	<form>
-		<br />
-		<fieldset>
-			<legend>Buscar reserva: </legend>
-			<br />
-			<div id="partSearched" style="display: none">
-				<label>Num de Reserva: </label> <input type="text" value="1"
-					disabled="disabled" />
+
+<input type="hidden" id="idDetalleReserva" />
+<input type="hidden" id="flagCheck" value ="checkout"/>
+			<div class="row panel-busqueda"> <!-- row de busqueda -->
+			<legend class="text-primary">Busqueda de reserva <span class="glyphicon glyphicon-search"></span></legend>
+			  <div class="col-xs-4">
+				<div class="input-group">
+				  <span class="input-group-addon">Nº Reserva</span>
+				  <input type="text" class="form-control input-sm" id="idReservaInput">
+				  <span class="input-group-addon">
+					<a  data-toggle="modal" href="#" id="btnBuscarByIdReserva" class="btnModalSearched">
+						<span class="glyphicon glyphicon-search"></span></a>
+				  </span>
+				</div><!-- /input-group -->
+			  </div><!-- /.col-lg- -->			 
+			  <div class="col-xs-4">
+				<div class="input-group">
+				  <span class="input-group-btn">
+					<select class="input-sm" id="comboNombreSelect">
+					  <option value="apellido">Apellido</option>
+					  <option value="razonsocial">Empresa</option>
+					</select>
+				  </span>
+				  <input type="text" class="form-control input-sm" id="nombresBuscarInput"/>
+				  <span class="input-group-addon">
+					<a  data-toggle="modal" href="#" id="btnBuscarByNombres" class="btnModalSearched">
+						<span class="glyphicon glyphicon-search"></span></a>
+				  </span>
+				</div><!-- /input-group -->
+			  </div><!-- /.col-lg- -->
+			  <div class="col-xs-4">
+				<div class="input-group">
+				  <span class="input-group-btn">
+					<select class="input-sm"  id="comboDocSelect">
+					  <option value="dni">DNI</option>
+					  <option value="pasa" title="Pasaporte">PASA</option>
+					  <option value="ruc">RUC</option>
+					</select>
+				  </span>
+				  <input type="text" class="form-control input-sm" id="docBuscarInput"/>
+				  <span class="input-group-addon">
+					<a  data-toggle="modal" href="#" id="btnBuscarByNumDocumento" class="btnModalSearched">
+						<span class="glyphicon glyphicon-search"></span></a>
+				  </span>
+				</div><!-- /input-group -->
+			  </div><!-- /.col-lg- -->
+		</div><!-- /.row busqueda-->
+		<!-- Modal -->
+		<div class="modal fade" id="modalSearched" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Resultado de busqueda</h4>
 			</div>
-			<div id="partBuscarReserva">
-				<label>Num de Reserva: </label> <input type="text" /> <label>Buscar
-					por:</label> <select id="tipoPersonaBusqueda"
-					onchange="cambiarPorTipoDeBusqueda();">
-					<option value="persona">Persona</option>
-					<option value="empresa">Empresa</option>
-				</select><br />
-				<!-- 	persona -->
-				<div id="bpersona">
-					<label class="bpersona">Nombre o apellido:</label>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label class="bpersona">Número
-						de documento:</label> <br />
-				</div>
-				<div id="bempresa" style="display: none">
-					<!-- 	empresa -->
-					<label class="bempresa">Razón social:</label>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<label class="bempresa">Ruc:</label> <br />
-				</div>
-				<input type="text" id="nombres" /> <input type="text" /> <input
-					type="button" value="Buscar" id="evaluarObjBuscado" /> <br />
-			</div>
-			<div id="clienteNoEncontrado" style="display: none">
-				<label>No se encontraron resultados.</label> <br />
-			</div>
-			<br />
-			<div id="clientesEncontrados" style="display: none">
-				<label>Resultado de la busqueda:</label> <br />
-				<table border="1" id="pool" tabindex='1'>
+					<div class="modal-body">
+					
+			<table class="table table-hover">
+				<thead>
 					<tr>
 						<th>Sel.</th>
-						<th width="130">Nº Reserva</th>
-						<th width="130">Persona</th>
-						<th width="130">Documento</th>
+						<th>Nº Reserva</th>
+						<th>Persona</th>
+						<th>Documento</th>
 					</tr>
-					<tr>
-						<td><input type="radio" name="searched" class="searched"
-							title="Se carga los datos de serva del buscados" /></td>
-						<td>0001</td>
-						<td>Rosita Garcia Davila</td>
-						<td>44852412</td>
-					</tr>
-					<tr>
-						<td><input type="radio" name="searched" class="searched"
-							title="Se carga los datos de serva del buscados" /></td>
-						<td>0006</td>
-						<td>Roberto Garcia Santos</td>
-						<td>44852412</td>
-					</tr>
-				</table>
+				</thead>
+				<tbody id="rowReservaSearched">
+					
+				</tbody>
+			</table>
+						</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default"
+					data-dismiss="modal">Cerrar</button>
+				<!--<button type="button" class="btn btn-primary">Save changes</button> -->
 			</div>
-		</fieldset>
-		<br />
-		<div id="reservasDelClienteBuscado" style="display: none">
-			<fieldset id="datosPersonales" disabled="disabled">
-				<legend>Datos del reservante</legend>
-				<table>
-					<tr>
-						<td>Tipo de persona:</td>
-						<td><select id="myself">
-								<option value="pjuridica">Natural</option>
-								<option value="pnatural">Juridica</option>
-						</select></td>
-					</tr>
-					<tr>
-						<td>Nombre</td>
-						<td><input type="text" name="nombre" value="Rosita"></td>
-						<td>Apellidos</td>
-						<td><input type="text" name="apellidos" value="Garcia Davila" /></td>
-					</tr>
-					<tr>
-						<td>DNI</td>
-						<td><input type="text" name="dni" value="44852412" /></td>
-						<td>Teléfono</td>
-						<td><input type="text" name="telefono" value="55555555"></td>
-					</tr>
-					<tr>
-						<td>Direccion</td>
-						<td><input type="text" name="Direccion" value="Su casa"></td>
-						<td>F. Registrada</td>
-						<td><input type="text" disabled="disabled"
-							value="<fmt:formatDate value="${fechita}" type="date" pattern="dd/MM/yyyy" />"
-							name="fecha"></td>
-					</tr>
-				</table>
-			</fieldset>
-			<br />
-			<fieldset>
-				<legend>Datos de la reserva</legend>
-				<br /> <label>Ambiente reservada</label> <br />
-				<table border="1" id="pool" tabindex='1'>
-					<tr>
-						<th>Select</th>
-						<th width="130">Ambiente</th>
-						<th width="130">F. Inicio</th>
-						<th width="130">F. Fin</th>
-					</tr>
-					<tr>
-						<td><input type="radio" name="ambiente"
-							title="NT: Se carga la lista de acompañantes" /></td>
-						<td>C003/H301</td>
-						<td>02/11/2013</td>
-						<td>02/12/2013</td>
-					</tr>
-				</table>
-				<br /> <br />
-				<table border="1">
-					<caption>Acompañantes de la habitación</caption>
-					<tr>
-						<th>Acompañante</th>
-						<th>Servicio</th>
-						<th>Monto</th>
-						<th>Lugar</th>
-						<th>¿Entregó tarjeta?</th>
-					</tr>
-					<tr>
-						<td>Gregorio Sanchez</td>
-						<td>Vino</td>
-						<td>40.0</td>
-						<td>Centro de Convenciones</td>
-						<td><input type="checkbox" disabled="disabled" /></td>
-					</tr>
-					<tr>
-						<td>Bill Gates</td>
-						<td>Champan</td>
-						<td>50.0</td>
-						<td>Centro de Recreacion</td>
-						<td><input type="checkbox" checked="checked"
-							disabled="disabled" /></td>
-					</tr>
-					<tr>
-						<td>Steven Jobs</td>
-						<td>Menu [Aji de gallina]</td>
-						<td>20.0</td>
-						<td>Restaurante</td>
-						<td><input type="checkbox" checked="checked"
-							disabled="disabled" /></td>
-					</tr>
-				</table>
-				<br /> <br /> <label>Total a pagar por los servicio S/.</label> <input
-					type="text" value="110" disabled="disabled" /> <br />
-			</fieldset>
 		</div>
-		<br /> <input type="button" value="Grabar" /> <input type="button"
-			value="Cancelar" />
-	</form>
-</fieldset>
+<!-- /.modal -->
+		<div class="panel-reserva-encontrada hidden"> <!-- hidden -->
+			<br/><div class="row">
+			  <div class="col-xs-4">
+				<div class="input-group input-group-lg">
+				  <span class="input-group-addon">Nº Reserva</span>
+				  <input type="text" class="form-control"  id="lblIdReserva" disabled />
+				</div><!-- /input-group -->
+			  </div><!-- /.col-lg- -->
+			</div><br/>
+		    <legend class="text-primary">Datos del reservante <span class="glyphicon glyphicon-user"></span></legend>
+			<dl class="dl-horizontal">
+				<dt>Tipo de persona</dt>
+				<dd>Natural</dd>
+				<dt>Nombres</dt>
+				<dd id="lblNombres"></dd>
+				<dt>Apellidos</dt>
+				<dd id="lblApellidos"></dd>
+				<dt>DNI</dt>
+				<dd id="lblDni"></dd>
+				<dd><a href="javascript:void(0);" class="btnActivarTextoSobrante" >Ver más <b class="caret"></b></a></dd>
+				<div class="hidden" id="textoSobrante">
+				<dt>Teléfono</dt>
+				<dd id="lblTelf"></dd>
+				<dt>Email</dt>
+				<dd id="lblEmail"></dd>
+				</div>
+			</dl>
+			<legend class="text-primary">Datos de la reserva <span class="glyphicon glyphicon-lock"></span></legend>
+			<form action="modificarEstadoCheckOut" id="formModificarEstadoCheckOut" >
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Nº Ambiente</th>
+						<th><span class="glyphicon glyphicon-user"></span> Actual</th>
+						<th>F. Inicio</th>
+						<th>F. Fin</th>
+						<th>Cons.</th>
+					</tr>
+				</thead>
+				<tbody id="rowDetalleReserva">
+					
+				</tbody>
+			</table>
+			</form>
+				<!-- Modal de detalle reserva-->
+			<div class="modal fade" id="modalDetalleReserva" tabindex="1" role="dialog" data-width="760"
+				aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- 				tamanoModalAcompCheckin -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Detalle de la reserva</h4>
+				</div>
+					<div class="modal-body">
+					<!-- cuerpo del modal -->
+					<table>
+						<tr>
+							<td>
+								<div class="input-group date " id="e" data-date="16-01-2014"
+									data-date-format="dd-mm-yyyy">
+									<span class="input-group-addon">Desde</span>
+									<input class="form-control input-sm" id="lblDesde" type="text" disabled/> <span class="input-group-addon"><i
+										class="glyphicon glyphicon-calendar"></i></span>
+								</div>
+							</td>
+							<td>
+								<div class="input-group date " id="e2" data-date="16-02-2014"
+									data-date-format="dd-mm-yyyy">
+									<span class="input-group-addon">Hasta</span>
+									<input class="form-control input-sm" type="text" id="lblHasta" disabled> <span class="input-group-addon"><i
+										class="glyphicon glyphicon-calendar"></i></span>
+								</div>
+							</td>						
+						</tr>
+					</table><br/>
+			
+					<legend class="text-primary">Información de la Habitación <span class="glyphicon glyphicon-list-alt"></span></legend>
+					<div class="media">
+						<a class="pull-left" href="#">
+						  <img data-src="holder.js/300x200" alt="300x200" style="width: 300px; height: 200px;" src="data:image/png;base64,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">
+						</a>
+						<div class="media-body">
+						  <h4 class="media-heading">Habitación: </h4> <p id="lblHab"></p>
+						  <h4 class="media-heading">Scope <span class="glyphicon glyphicon-user"></span>: </h4> <p id="lblCapacidad"></p>
+						  <h4 class="media-heading">Descripción: </h4> <p id="lblDescripcion"></p>
+						 </div>			
+					</div>			
+					<br/><br/>
+					<table class="table table-hover">
+					<legend class="text-primary">Acompañantes <span class="glyphicon glyphicon-user"></span></legend>
+						<thead>
+							<tr>
+								<th>Nombres</th>
+								<th>Tipo Doc</th>
+								<th>Nº Documento</th>
+								<th>Tarjeta</th>
+								<th>Gasto en servicios.</th>
+								<th>Detalle</th>
+							</tr>
+						</thead>
+						<tbody id="contenerParaAgregarAcomp">			
+						</tbody>
+					</table>
+					<div class="modal fadex" id="modalConsumosAcomp" tabindex="-1"
+						role="dialog" aria-labelledby="myModalLabelx" aria-hidden="true">
+					<div class="modal-header">
+						<button type="button" class="close closeModalSegundo"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Consumo del acompañante</h4>
+					</div>
+					<div class="modal-body">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th>Servicio / Producto</th>
+											<th>Precio</th>
+											<th>Cantidad</th>
+											<th>Sub Total</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Vino</td>
+											<td>S/. 120.00</td>
+											<td>2</td>
+											<td>S/. 240.00</td>
+										</tr>
+										<tr>
+											<td>Menu [Aji de gallina]</td>
+											<td>S/. 20.00</td>
+											<td>1</td>
+											<td>S/. 20.00</td>
+										</tr>
+										<tr>
+											<td></td>
+											<td></td>
+											<td>Total</td>
+											<td>S/. 260.00</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default closeModalSegundo" data-dismiss="modal">Cerrar</button>
+								<!--<button type="button" class="btn btn-primary">Save changes</button> -->
+							</div> <!-- -body hijo -->
+						</div>
+					</div> <!-- -budy padre  -->
+					<div class="modal-footer">						
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					</div>
+			</div><!-- fin del modal detalleReserva  -->
+			
+			<br/>
+			<div class="row">
+			<div class="col-md-6 col-md-offset-3 col-xs-5">
+				<div class="input-group input-group-lg">
+					<span class="input-group-addon">Monto a pagar</span> <label
+						id="montoAPagar" class="form-control">S/. </label>
+				</div>
+		    </div><!-- /.col-lg- -->
+			</div><br/>		
+			
+			<div class="row">
+				<div class="col-md-8 col-md-offset-4 modal-footer">
+				<a data-toggle="modal"	onclick="$('#formModificarEstadoCheckOut').submit();" type="button" class="btn btn-primary" id="btnCheckOut">Check-in</a>
+				<button type="button" class="btn btn-default" id="btnCancelar">Cancelar</button>
+				</div>
+			</div>
+		</div>
+		
+<div id="modalResultado" class="modal fade" tabindex="-1" style="display: none;">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"
+			aria-hidden="true">×</button>
+		<h4 class="modal-title">Operación completa</h4>
+	</div>
+	<div class="modal-body">
+		<div class="alert alert-success" id="remplazoSuccessResult">
+	      <strong>Success!</strong>
+	      Se operación se realizó sin problemas.
+	    </div>
+		<div class="alert alert-danger hidden" id="remplazoDangerResult">
+	      <strong>Oh snap!</strong>
+	      Debido a Pellentesque in ipsum id orci porta dapibus. Donec sollicitudin molestie malesuada.
+	    </div>
+	</div>
+	<div class="modal-footer">
+		<div class="row">
+		  <a type="button" class="btn btn-danger" href="checkin.action">Finalizar</a>
+		</div>
+	</div>
+</div>
