@@ -239,6 +239,8 @@ public class ReservaAction extends ActionSupport {
 		return SUCCESS;
 	}
 
+	private boolean incluirme; 
+	
 	//COMMIT CAB
 	@Action(value="procesarReservaCab", results = { @Result(name = "success", type = "json") })
 	public String procesarReservaCab(){
@@ -249,10 +251,10 @@ public class ReservaAction extends ActionSupport {
 		HttpServletResponse response = ServletActionContext.getResponse();
 		List<Map<String, Object>> rs=null;
 		Gson gs=new Gson();
-
+		
 		//data negocio
 		List<PersonaDTO> listAmbs = gs.fromJson(acompData,new TypeToken<List<PersonaDTO>>(){}.getType());
-
+	
 		//data result
 		Map<String,Object> rt=new HashMap<String,Object>();
 
@@ -260,11 +262,13 @@ public class ReservaAction extends ActionSupport {
 		if("lvlProc".equals(flagNivelGetIdResera)){
 			String idUsuario=MyUtil.getValueCookie(request, "idUsuario");
 			rs=rdao.buscarReservaByLogged(Integer.parseInt(idUsuario));
+			ClienteDTO cli=udao.getClienteByIdUsuario(idUsuario);
+			
 			if(rs.size()>0){
+				rt.put("userTablaRs", cli.getIdCliente());
 				rt.put("tablaReservas", rs);
 			}else{
 				_log.info("insers proc cab");
-				ClienteDTO cli=udao.getClienteByIdUsuario(idUsuario);
 				
 				ReservaDTO r=new ReservaDTO();
 				r.setClienteDTO(cli);
@@ -278,6 +282,11 @@ public class ReservaAction extends ActionSupport {
 				dr.setFecInicio(desde);
 				dr.setFecFin(hasta);
 				
+				if(incluirme){
+					PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+					listAmbs.add(p);
+				}
+				
 				udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 							
 			}
@@ -289,10 +298,11 @@ public class ReservaAction extends ActionSupport {
 					if(MyUtil.getValueCookie(request, "idPerfil").equals("")){
 						MyUtil.iniciarSesion(response, user);					
 					}
-					rt.put("userTablaRs", user);
+					rt.put("userTablaRs", rs.get(0).get("idcliente"));
 					rt.put("tablaReservas", rs);
 				}else{
-					ClienteDTO cli=udao.getClienteByIdUsuario(user);
+					
+					ClienteDTO cli=udao.getClienteByUser(user);
 					ReservaDTO r=new ReservaDTO();
 					r.setClienteDTO(cli);
 					DetalleReservaDTO dr=new DetalleReservaDTO();
@@ -302,6 +312,12 @@ public class ReservaAction extends ActionSupport {
 					dr.setAmbienteDTO(amb);
 					dr.setFecInicio(desde);
 					dr.setFecFin(hasta);
+					
+					if(incluirme){
+						PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+						listAmbs.add(p);
+					}
+					
 					udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 					
 					if(MyUtil.getValueCookie(request, "idPerfil").equals("")){
@@ -321,21 +337,29 @@ public class ReservaAction extends ActionSupport {
 			p.setNumDocumento(numDocumento);
 			p.setTelf(telf);
 			p.setEmail(email);
+			
 			ClienteDTO cli=udao.registroPersonaUsuarioClienteWithPersona(p);
 			ReservaDTO r=new ReservaDTO();
 			r.setClienteDTO(cli);
 			DetalleReservaDTO dr=new DetalleReservaDTO();
 			dr.setReservaDTO(r);
+			
 			AmbienteDTO amb=new AmbienteDTO();
 			amb.setIdAmbiente(Integer.parseInt(idAmbiente));
 			dr.setAmbienteDTO(amb);
 			dr.setFecInicio(desde);
 			dr.setFecFin(hasta);
+			
+			if(incluirme){
+				listAmbs.add(p);
+			}
+			
 			udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 
 			String idPerfil=MyUtil.getValueCookie(request, "idPerfil");
+			
 			if(idPerfil.equals("")){
-				String userGenered=p.getNombres().substring(0,1).concat(p.getApePaterno());			
+				String userGenered=p.getEmail();			
 				MyUtil.iniciarSesion(response, userGenered);				
 			}
 			
@@ -343,8 +367,10 @@ public class ReservaAction extends ActionSupport {
 			rt.put("perfil",idPerfil);
 			
 		}else if("lvlSelect".equals(flagNivelGetIdResera)){
+			
+			System.out.println("user: " + user);
 			if(idReserva.equals("nuevoContenedor")){
-				ClienteDTO cli=udao.getClienteByIdUsuario(user);
+				ClienteDTO cli=udao.getClienteByIdCliente(user);
 				
 				ReservaDTO r=new ReservaDTO();
 				r.setClienteDTO(cli);
@@ -356,7 +382,12 @@ public class ReservaAction extends ActionSupport {
 				amb.setIdAmbiente(Integer.parseInt(idAmbiente));
 				dr.setAmbienteDTO(amb);
 				dr.setFecInicio(desde);
-				dr.setFecFin(hasta);
+				dr.setFecFin(hasta);				
+				
+				if(incluirme){
+					PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+					listAmbs.add(p);
+				}
 				
 				udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 			}else{
@@ -375,9 +406,18 @@ public class ReservaAction extends ActionSupport {
 				dr.setFecInicio(desde);
 				dr.setFecFin(hasta);
 				
+				if(incluirme){
+					PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+					listAmbs.add(p);
+				}
+				
 				udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 			}
 			rt.put("result","success");
+			rt.put("newContenedor","newContenedor");
+			rt.put("idReserva",idReserva);
+			rt.put("desde", desde);
+			rt.put("hasta", hasta);
 			_log.info("insers select cab");
 		}
 
@@ -388,7 +428,7 @@ public class ReservaAction extends ActionSupport {
 	//COMMIT CONVE
 	@Action(value="procesarReservaConve", results = { @Result(name = "success", type = "json") })
 	public String procesarReservaConve(){
-		_log.info("procesarReservaCab");
+		_log.info("procesarReservaConve");
 
 		//data logica
 		HttpServletRequest request = ServletActionContext.getRequest();
@@ -398,7 +438,7 @@ public class ReservaAction extends ActionSupport {
 
 		//data negocio
 		List<PersonaDTO> listAmbs = gs.fromJson(acompData,new TypeToken<List<PersonaDTO>>(){}.getType());
-
+		
 		//data result
 		Map<String,Object> rt=new HashMap<String,Object>();
 
@@ -424,6 +464,9 @@ public class ReservaAction extends ActionSupport {
 				dr.setFecInicio(desde);
 				dr.setFecFin(hasta);
 				
+				PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+				listAmbs.add(p);
+				
 				udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 							
 			}
@@ -448,6 +491,10 @@ public class ReservaAction extends ActionSupport {
 					dr.setAmbienteDTO(amb);
 					dr.setFecInicio(desde);
 					dr.setFecFin(hasta);
+					
+					PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+					listAmbs.add(p);
+					
 					udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 					
 					if(MyUtil.getValueCookie(request, "idPerfil").equals("")){
@@ -477,6 +524,9 @@ public class ReservaAction extends ActionSupport {
 			dr.setAmbienteDTO(amb);
 			dr.setFecInicio(desde);
 			dr.setFecFin(hasta);
+			
+			listAmbs.add(p);
+			
 			udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 
 			String idPerfil=MyUtil.getValueCookie(request, "idPerfil");
@@ -504,6 +554,9 @@ public class ReservaAction extends ActionSupport {
 				dr.setFecInicio(desde);
 				dr.setFecFin(hasta);
 				
+				PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+				listAmbs.add(p);
+				
 				udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 			}else{
 				ClienteDTO cli=udao.getClienteByIdUsuario(user);
@@ -521,9 +574,16 @@ public class ReservaAction extends ActionSupport {
 				dr.setFecInicio(desde);
 				dr.setFecFin(hasta);
 				
+				PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+				listAmbs.add(p);
+				
 				udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 			}
 			rt.put("result","success");
+			rt.put("newContenedor","newContenedor");
+			rt.put("idReserva",idReserva);
+			rt.put("desde", desde);
+			rt.put("hasta", hasta);
 			_log.info("insers select cab");
 		}
 
@@ -570,6 +630,9 @@ public class ReservaAction extends ActionSupport {
 				dr.setFecInicio(desde);
 				dr.setFecFin(hasta);
 				
+				PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+				listAmbs.add(p);
+				
 				udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 							
 			}
@@ -594,6 +657,10 @@ public class ReservaAction extends ActionSupport {
 					dr.setAmbienteDTO(amb);
 					dr.setFecInicio(desde);
 					dr.setFecFin(hasta);
+					
+					PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+					listAmbs.add(p);
+					
 					udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 					
 					if(MyUtil.getValueCookie(request, "idPerfil").equals("")){
@@ -623,6 +690,9 @@ public class ReservaAction extends ActionSupport {
 			dr.setAmbienteDTO(amb);
 			dr.setFecInicio(desde);
 			dr.setFecFin(hasta);
+			
+			listAmbs.add(p);
+			
 			udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
 
 			String idPerfil=MyUtil.getValueCookie(request, "idPerfil");
@@ -650,7 +720,11 @@ public class ReservaAction extends ActionSupport {
 				dr.setFecInicio(desde);
 				dr.setFecFin(hasta);
 				
+				PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+				listAmbs.add(p);
+				
 				udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
+				rt.put("result","newContenedor");
 			}else{
 				ClienteDTO cli=udao.getClienteByIdUsuario(user);
 				
@@ -667,9 +741,15 @@ public class ReservaAction extends ActionSupport {
 				dr.setFecInicio(desde);
 				dr.setFecFin(hasta);
 				
+				PersonaDTO p = udao.getPersonaByIdCliente(cli.getIdCliente());
+				listAmbs.add(p);
+				
 				udao.registroReservaDetalleReservaPersonaWithCliente(r, dr, listAmbs);
+				rt.put("result","success");
 			}
-			rt.put("result","success");
+			rt.put("idReserva",idReserva);
+			rt.put("desde", desde);
+			rt.put("hasta", hasta);
 		}
 
 		this.setMessage(gs.toJson(rt));
@@ -791,4 +871,9 @@ public class ReservaAction extends ActionSupport {
 	public void setAmbientesFromHome(String ambientesFromHome) {
 		this.ambientesFromHome = ambientesFromHome;
 	}
+
+	public void setIncluirme(boolean incluirme) {
+		this.incluirme = incluirme;
+	}
+	
 }

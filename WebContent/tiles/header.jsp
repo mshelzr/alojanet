@@ -40,17 +40,17 @@
 					<form class="navbar-form navbar-right" role="form">
 						<div class="form-group">
 							<label class="sr-only" for="exampleInputEmail2">Email
-								address</label> <input type="email" name="username"
-								class="form-control input-sm" id="username"
+								address</label> <input type="text" name="username"
+								class="form-control input-sm required" id="username"
 								placeholder="Enter user or email">
 						</div>
 						<div class="form-group">
 							<label class="sr-only" for="exampleInputPassword2">Password</label>
 							<input type="password" name="password"
-								class="form-control input-sm" id="password"
+								class="form-control input-sm required" id="password"
 								placeholder="Password">
 						</div>
-						<button id="btnLoginNav" type="button" class="btn btn-default"
+						<button id="btnLoginNav" type="submit" class="btn btn-default"
 							data-container="body" data-toggle="popover" data-placement="bottom">
 							<span class="glyphicon glyphicon-share-alt"></span>
 						</button>
@@ -63,24 +63,24 @@
 									aria-hidden="true">&times;</button>
 								<h4 class="modal-title">Registrate, falta poco para
 									disfrutes de nuestros servicios</h4>
-							</div>
+							</div>							
+							 <form id="registroPersonaXMS">
 								<div class="modal-body">
 									<div class="panel panel-success">
 										<div class="panel-heading">
 											<h3 class="panel-title">Registro clasico.</h3>
 										</div>
 										<div class="panel-body">
-											<form>
 												<table>
 													<tr>
 														<td>Nombre</td>
-														<td><input type="text"name="nombres" required="" ></td>
+														<td class="inputval"><input type="text" name="nombres" class="required" ></td>
 														<td>A. Paterno</td>
-														<td><input type="text" name="apePaterno" required=""/></td>
+														<td class="inputval"><input type="text" name="apePaterno" class="required" /></td>
 													</tr>
 													<tr>
 														<td>A. Materno</td>
-														<td><input type="text" name="apeMaterno" required=""/></td>
+														<td class="inputval"><input type="text" name="apeMaterno" class="required"/></td>
 														<td>Tipo de Documento</td>
 														<td><select>
 																<option>DNI</option>
@@ -89,31 +89,31 @@
 													</tr>
 													<tr>
 														<td>Nº Documento</td>
-														<td><input type="text" name="numDocumento"></td>
+														<td class="inputval"><input type="text" name="numDocumento" id="numDocumento" class="required number"></td>
 														<td>Confirmar Nº Documento</td>
-														<td><input type="text" name="conifNumDocumento"></td>
+														<td class="inputval"><input type="text" name="conifNumDocumento" class="required number" title="No coincide" equalTo="#numDocumento"></td>
 													</tr>
 													<tr>
 														<td>Dirección</td>
-														<td><input type="text" name="direccion" /></td>
+														<td class="inputval"><input type="text" name="direccion" class="required" /></td>
 														<td>Teléfono</td>
-														<td><input type="text" name="telf"></td>
+														<td class="inputval"><input type="text" name="telf" class="required number"></td>
 													</tr>
 													<tr>
 														<td>Email</td>
-														<td><input type="text" name="email"></td>
+														<td class="inputval"><input type="text" name="email" id="email" class="required email" ></td>
 														<td>Confirmar Email</td>
-														<td><input type="text" name="confemail"></td>
+														<td class="inputval"><input type="text" name="confemail" class="required email" equalTo="#email"></td>
 													</tr>
 												</table>
-											</form>
 										</div>
 									</div>
 								</div>
 								<div class="modal-footer">
-									<button type="button" id="btnRegistro" class="btn btn-primary">Registrarse</button>
+									<button type="submit" id="btnRegistro" class="btn btn-primary">Registrarse</button>
 									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>								
 								</div>
+								</form>
 							</div>
 				</c:otherwise>
 			</c:choose>

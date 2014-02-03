@@ -1,8 +1,6 @@
 package pe.libertadores.alojamiento.seguridad.actions;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -18,11 +16,9 @@ import org.apache.struts2.convention.annotation.Result;
 
 import pe.libertadores.alojamiento.reserva.actions.MyUtil;
 import pe.libertadores.alojamiento.seguridad.dao.UsuarioDao;
-import pe.libertadores.dto.MenuDTO;
 import pe.libertadores.dto.PersonaDTO;
 import pe.libertadores.dto.UsuarioDTO;
 
-import com.google.gson.Gson;
 import com.opensymphony.xwork2.ActionSupport;
 
 @ParentPackage(value = "alojamiento")
@@ -118,14 +114,6 @@ public class LoginAction extends ActionSupport {
 
 	@Action(value="registro",results={@Result(name="success",type="json")})
 	public String registro(){
-		
-		System.out.println(nombres);
-		System.out.println(apePaterno);
-		System.out.println(apeMaterno);
-		System.out.println(numDocumento);
-		System.out.println(direccion);
-		System.out.println(telf);
-		System.out.println(email);		
 				
 		PersonaDTO p=new PersonaDTO();
 		p.setNombres(nombres);
@@ -134,11 +122,10 @@ public class LoginAction extends ActionSupport {
 		p.setNumDocumento(numDocumento);
 		p.setTelf(telf);
 		p.setEmail(email);		
-		
+
 		usuarioDao.registroPersonaUsuarioClienteWithPersona(p);
-		//cookies
-		HttpServletResponse response=ServletActionContext.getResponse();
-//		MyUtil.validarUsuarioUtil(response, user, pwd);
+		HttpServletResponse response = ServletActionContext.getResponse();
+		MyUtil.iniciarSesion(response, email);
 		
 		Map<String,Object> resultMap=new HashMap<String,Object>();
 		resultMap.put("result", "success");

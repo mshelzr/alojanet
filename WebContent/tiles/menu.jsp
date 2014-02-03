@@ -72,9 +72,6 @@
 					<div class="panel-body">
 						<a href="agregarReserva.action">Abrir Reserva</a>
 					</div>
-					<div class="panel-body">
-						<a href="#">...</a>
-					</div>
 				</div>
 			</div>
 			<div class="panel panel-default">

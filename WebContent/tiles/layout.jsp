@@ -9,6 +9,7 @@
 <title><tiles:insertAttribute name="title" ignore="true" /></title>
 
 <sj:head jqueryui="true" jquerytheme="le-frog" locale="es"/>
+<script type="text/javascript" src="../resources/js/jquery.validate.js"></script>
 <link rel="stylesheet" type="text/css" href="../resources/css/bootstrap.min.css">
 <script type="text/javascript" src="../resources/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="../resources/css/jquery.ui.all.css">

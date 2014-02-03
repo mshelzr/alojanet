@@ -31,6 +31,7 @@
 <link rel="stylesheet" type="text/css" href="../resources/css/bootstrap-modal-bs3patch.css">
 
 <!-- main -->
+<script type="text/javascript" src="../resources/js/jquery.validate.js"></script>
 <script type="text/javascript" src="../resources/js/main.js"></script>
 <link rel="stylesheet" type="text/css" href="../resources/css/portal.css">
 
@@ -53,34 +54,34 @@
 							Además de... <a class="btn btn-primary btn-large" href="#">Ver
 								más</a>
 						</p>
-						<form action="agregarReserva.action">
+						<form id="formBusqRapida" action="agregarReserva.action">
 							<table>
 								<tr>
 									<td><img src="../resources/img/choose_domain.png"></td>
 								</tr>
 								<tr>
 									<td>
-										<div class="input-group date " id="e" data-date-format="yyyy-mm-dd" >
-											<input class="form-control input-lg" type="text"
-												name="fInicio" placeholder="Desde"> <span
+										<div class="input-group date inputval" id="e" data-date-format="yyyy-mm-dd" >
+											<input class="form-control input-lg required" type="text"
+												name="fInicio" placeholder="Desde" id="fInicio" /> <span
 												class="input-group-addon"><i
 												class="glyphicon glyphicon-calendar"></i></span>
 										</div>
 									</td>
 									<td>
-										<div class="input-group date " id="ee" data-date-format="yyyy-mm-dd" >
-											<input class="form-control input-lg" type="text" name="fFin"
-												placeholder="Hasta"> <span class="input-group-addon"><i
+										<div class="input-group date inputval" id="ee" data-date-format="yyyy-mm-dd" >
+											<input class="form-control input-lg required" type="text" name="fFin"
+												 greaterThan="#fInicio" placeholder="Hasta" id="fFin" /> <span class="input-group-addon"><i
 												class="glyphicon glyphicon-calendar"></i></span>
 										</div>
 									</td>
 									<td><select class="form-control input-lg" name="tpoAmb">
 											<option value="1" title="Centro recreacional">Alojamiento</option>
-											<option value="2" >Convencion</option>
+											<option value="2" >Convención</option>
 											<option value="3" title="Ambiente General.">Ambientes</option>
 									</select></td>
 									<td>
-										<button type="submit" class="btn btn-primary btn-lg">
+										<button id="btnBusquedaRapida" type="submit" class="btn btn-primary btn-lg">
 											Buscar <span class="glyphicon glyphicon-search"></span>
 										</button>
 									</td>

@@ -5,11 +5,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:useBean id="fechita" class="java.util.Date" />
 
-<!-- <form action="actionTest.action"> -->
-<!-- <input type="submit" value="Go" /> -->
-<!-- </form> -->
-<!-- <input type="text" name="gracioso" /> -->
-
 <input type="hidden" id="perfilLoggeado"
 	value="${cookie.idPerfil.value}" />
 <input type="hidden" value="${flagBusquedaHome}" id="flagFromHome" />
@@ -19,10 +14,10 @@
 	id="fecInicioFromHome" />
 <input type="hidden" value='<s:property value="fFin"/>'
 	id="fecFinFromHome" />
-<input type="hidden" name="ambiente" id="ambiente" />
-<input type="hidden" name="habitacion" id="habitacion" />
-<input type="hidden" name="acompanantesValues" id="acompanantesValues" />
+<input type="hidden" name="habitacion" id="habitacion" class="required" />
 <input type="hidden" id="tabSelected" value="1" />
+<input type="hidden" id="ambiente" />
+
 <ul id="myTab" class="nav nav-tabs">
 	<li
 		class=" <c:if test="${flagBusquedaHome eq 1 || flagBusquedaHome eq 0}">active </c:if>"><a
@@ -39,33 +34,36 @@
 		class="tab-pane fade <c:if test="${flagBusquedaHome eq 1 || flagBusquedaHome eq 0}">active in</c:if>"
 		id="tone">
 		<br />
-		<table>
-			<tr>
-				<td>
-					<div class="input-group date " id="e" data-date="2014-01-21"
-						data-date-format="yyyy-mm-dd">
-						<span class="input-group-addon">Desde</span> <input
-							class="form-control input-sm" id="desdeCab" type="text" /> <span
-							class="input-group-addon"><i
-							class="glyphicon glyphicon-calendar"></i></span>
-					</div>
-				</td>
-				<td>
-					<div class="input-group date " id="e" data-date="2014-01-22"
-						data-date-format="yyyy-mm-dd">
-						<span class="input-group-addon">Hasta</span> <input
-							class="form-control input-sm" id="hastaCab" type="text">
-						<span class="input-group-addon"><i
-							class="glyphicon glyphicon-calendar"></i></span>
-					</div>
-				</td>
-				<td>
-					<button type="button" class="btn btn-primary btn-sm btnBuscarCabs">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</td>
-			</tr>
-		</table>
+		<form>
+			<table>
+				<tr>
+					<td>
+						<div class="input-group date " id="e" data-date="2014-01-21"
+							data-date-format="yyyy-mm-dd">
+							<span class="input-group-addon">Desde</span> <input
+								class="form-control input-sm required" name="desdeCab"
+								id="desdeCab" type="text" /> <span class="input-group-addon"><i
+								class="glyphicon glyphicon-calendar"></i></span>
+						</div>
+					</td>
+					<td>
+						<div class="input-group date " id="e" data-date="2014-01-22"
+							data-date-format="yyyy-mm-dd">
+							<span class="input-group-addon">Hasta</span> <input
+								class="form-control input-sm required" greaterThan="#desdeCab"
+								name="hastaCab" id="hastaCab" type="text"> <span
+								class="input-group-addon"><i
+								class="glyphicon glyphicon-calendar"></i></span>
+						</div>
+					</td>
+					<td>
+						<button type="submit" class="btn btn-primary btn-sm btnBuscarCabs">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</td>
+				</tr>
+			</table>
+		</form>
 		<br />
 
 		<div class="panel-group panel-cabs-searched hidden" id="panel-351682">
@@ -90,6 +88,7 @@
 		</div>
 		<br />
 		<div class="hidden" id="panel-habs-searched">
+			<input type="hidden" id="scopePersonasCab" />
 			<div class="row" id="contenerHabs">
 				<legend class="text-primary">
 					Habitaciones <span class="glyphicon glyphicon-list-alt"></span>
@@ -98,106 +97,120 @@
 		</div>
 		<div class="hidden" id="panel-acompanantes-hab-searched">
 			<div class="row">
-				<legend class="text-primary">
-					Acompañantes <span class="glyphicon glyphicon-user"></span>
-				</legend>
-				<div class="col-xs-3">
-					<input placeholder="Nombres" id="inputNombresAcomp-Cab"
-						class="form-control input-sm" type="text">
-				</div>
+				<form>
+					<legend class="text-primary">
+						Acompañantes <span class="glyphicon glyphicon-user"></span>
+					</legend>					
+					<div class="col-sm-offset-10" class="incluirme">
+						<div class="checkbox" class="incluirme">
+							<label> <input type="checkbox" name="incluirme" id="incluirme" /> Incluirme <span
+								class="glyphicon glyphicon-user"></span>
+							</label>
+						</div>
+					</div>
+					<div class="col-xs-3">
+						<input placeholder="Nombres" name="nombres"
+							id="inputNombresAcompCab" class="form-control input-sm required"
+							type="text">
+					</div>
+					<div class="col-xs-2">
+						<input placeholder="A. Paterno" name="apePaterno" type="text"
+							class="form-control input-sm required"
+							id="inputApePaternoAcompCab">
+					</div>
+					<div class="col-xs-2">
+						<input placeholder="A. Materno" name="apeMaterno" type="text"
+							class="form-control input-sm required"
+							id="inputApeMaternoAcompCab">
+					</div>
+					<div class="col-xs-5">
+						<div class="input-group">
+							<span class="input-group-btn"> <select class="input-sm"
+								id="inputTipoDocAcomp-Cab">
+									<option value="DNI">DNI</option>
+									<option value="PASA" title="Pasaporte">PASA</option>
+							</select>
+							</span> <input placeholder="Número" name="numero" type="text"
+								class="form-control input-sm required number"
+								id="inputDocAcompCab"> <span class="input-group-addon">
+								<input type="submit" class="hidden" id="btnAddAcompCab" /> <a
+								id="btnAgregarAcompCab" href="javascript:void(0);"
+								onclick="$('#btnAddAcompCab').trigger('click');"> <span
+									class="glyphicon glyphicon-plus"></span> <span
+									class="glyphicon glyphicon-user"></span></a>
+							</span>
+						</div>
+					</div>
+				</form>
+			</div>
+			<form>
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>Nombres</th>
+							<th>A. Paterno</th>
+							<th>A. Materno</th>
+							<th>Documento</th>
+							<th>Nº</th>
+							<th>Elim.</th>
+						</tr>
+					</thead>
+					<tbody id="tablaAcompCab">
 
-				<div class="col-xs-2">
-
-					<input placeholder="A. Paterno" type="text"
-						class="form-control input-sm" id="inputApePaternoAcomp-Cab"
-						size="6">
-				</div>
-				<div class="col-xs-2">
-
-					<input placeholder="A. Materno" type="text"
-						class="form-control input-sm" id="inputApeMaternoAcomp-Cab">
-				</div>
-				<div class="col-xs-5">
-					<div class="input-group">
-						<span class="input-group-btn"> <select class="input-sm"
-							id="inputTipoDocAcomp-Cab">
-								<option>DNI</option>
-								<option title="Pasaporte">PASA</option>
-						</select>
-						</span> <input placeholder="Número" type="text"
-							class="form-control input-sm" id="inputDocAcomp-Cab"> <span
-							class="input-group-addon"> <a href="javascript:void(0);"
-							id="btnAgregarAcomp-Cab"> <span
-								class="glyphicon glyphicon-plus"></span> <span
-								class="glyphicon glyphicon-user"></span></a>
-						</span>
+					</tbody>
+				</table>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-4 modal-footer">
+						<input type="hidden" name="ambienteCab" id="ambienteCab" />
+						<button type="submit" class="btn btn-primary btnReservar"
+							id="btnReservarCab">Reservar</button>
+						<button type="button" onclick="javascript:history.go(-1);"
+							class="btn btn-default">Cancelar</button>
 					</div>
 				</div>
-			</div>
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>Nombres</th>
-						<th>A. Paterno</th>
-						<th>A. Materno</th>
-						<th>Documento</th>
-						<th>Nº</th>
-						<th>Mod.</th>
-						<th>Elim.</th>
-					</tr>
-				</thead>
-				<tbody id="tablaAcompCab">
-
-				</tbody>
-			</table>
-			<div class="row">
-				<div class="col-md-8 col-md-offset-4 modal-footer">
-					<button type="button" class="btn btn-primary btnReservar"
-						id="btnReservarCab">Reservar</button>
-					<button type="button" class="btn btn-default">Cancelar</button>
-				</div>
-			</div>
+			</form>
 		</div>
-		<!-- Fin de la tabla acompañantes -->
-
 	</div>
-	<!-- -one -->
 	<!-- 		DIV: NUMERO DOS -->
 	<div
 		class="tab-pane fade <c:if test="${flagBusquedaHome eq 2}">active in</c:if>"
 		id="ttwo">
 		<br />
-		<table>
-			<tr>
-				<td>
-					<div class="input-group date " id="e" data-date="2014-01-21"
-						data-date-format="yyyy-mm-dd">
-						<span class="input-group-addon">Desde</span> <input
-							class="form-control input-sm" id="desdeConve" type="text" /> <span
-							class="input-group-addon"><i
-							class="glyphicon glyphicon-calendar"></i></span>
-					</div>
-				</td>
-				<td>
-					<div class="input-group date " id="e" data-date="2014-01-22"
-						data-date-format="yyyy-mm-dd">
-						<span class="input-group-addon">Hasta</span> <input
-							class="form-control input-sm" id="hastaConve" type="text">
-						<span class="input-group-addon"><i
-							class="glyphicon glyphicon-calendar"></i></span>
-					</div>
-				</td>
-				<td>
-					<button type="button"
-						class="btn btn-primary btn-sm btnEnterConvencion">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</td>
-			</tr>
-		</table>
+		<form>
+			<table>
+				<tr>
+					<td>
+						<div class="input-group date " id="e" data-date="2014-01-21"
+							data-date-format="yyyy-mm-dd">
+							<span class="input-group-addon">Desde</span> <input
+								class="form-control input-sm required" name="desdeConve"
+								id="desdeConve" type="text" /> <span class="input-group-addon"><i
+								class="glyphicon glyphicon-calendar"></i></span>
+						</div>
+					</td>
+					<td>
+						<div class="input-group date " id="e" data-date="2014-01-22"
+							data-date-format="yyyy-mm-dd">
+							<span class="input-group-addon">Hasta</span> <input
+								class="form-control input-sm required" greaterThan="#desdeConve"
+								name="hastaConve" id="hastaConve" type="text"> <span
+								class="input-group-addon"><i
+								class="glyphicon glyphicon-calendar"></i></span>
+						</div>
+					</td>
+					<td>
+						<button type="submit"
+							class="btn btn-primary btn-sm btnEnterConvencion">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</td>
+				</tr>
+			</table>
+		</form>
 		<br />
 
 		<div class="row hidden" id="panel-convencion-searched">
+			<input type="hidden" id="scopePersonasConve" />
 			<ul class="media-list" id="contenedorConvens">
 
 			</ul>
@@ -213,29 +226,9 @@
 							<li><strong>Select a subject</strong></li>
 							<li class="active"><input type="checkbox" />Maths</li>
 							<li><input type="checkbox" />English</li>
-							<li><input type="checkbox" />Art and Design</li>
-							<li><input type="checkbox" />Drama</li>
-							<li><input type="checkbox" />Music</li>
-							<li><input type="checkbox" />Physics</li>
-							<li><input type="checkbox" />Chemistry</li>
-							<li><input type="checkbox" />Biology</li>
-							<li><input type="checkbox" />Home economics</li>
-							<li><input type="checkbox" />Physical Education</li>
-							<li><input type="checkbox" />Computing Science</li>
-							<li><input type="checkbox" />French</li>
-							<li><input type="checkbox" />German</li>
-							<li><input type="checkbox" />Mandarin</li>
-							<li><input type="checkbox" />Religious Education</li>
-							<li><input type="checkbox" />Modern Studies</li>
-							<li><input type="checkbox" />Geography</li>
-							<li><input type="checkbox" />History</li>
-							<li><input type="checkbox" />Creative computing</li>
-							<li><input type="checkbox" />Craft, Design and Technology</li>
 						</ul>
 					</div>
-					/.well
 				</div>
-				/span
 				<div class="bs-callout bs-callout-warning">
 					<h4>Personas que se encuentran alojadas</h4>
 					<p>Praesent sapien massa, convallis a pellentesque nec, egestas
@@ -244,68 +237,75 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="hidden" id="panel-acompanantes-cen-searched">
-			<div class="row">
-				<legend class="text-primary">
-					Acompañantes <span class="glyphicon glyphicon-user"></span>
-				</legend>
-				<div class="col-xs-3">
-					<input placeholder="Nombres" id="inputNombresAcomp-Conve"
-						class="form-control input-sm" type="text">
-				</div>
-
-				<div class="col-xs-2">
-
-					<input placeholder="A. Paterno" type="text"
-						class="form-control input-sm" id="inputApePaternoAcomp-Conve"
-						size="6">
-				</div>
-				<div class="col-xs-2">
-
-					<input placeholder="A. Materno" type="text"
-						class="form-control input-sm" id="inputApeMaternoAcomp-Conve">
-				</div>
-				<div class="col-xs-5">
-					<div class="input-group">
-						<span class="input-group-btn"> <select class="input-sm"
-							id="inputTipoDocAcomp-Conve">
-								<option>DNI</option>
-								<option title="Pasaporte">PASA</option>
-						</select>
-						</span> <input placeholder="Número" type="text"
-							class="form-control input-sm" id="inputDocAcomp-Conve"> <span
-							class="input-group-addon"> <a href="javascript:void(0);"
-							id="btnAgregarAcomp-Conve"> <span
-								class="glyphicon glyphicon-plus"></span> <span
-								class="glyphicon glyphicon-user"></span></a>
-						</span>
+			<form>
+				<div class="row">
+					<legend class="text-primary">
+						Acompañantes <span class="glyphicon glyphicon-user"></span>
+					</legend>
+					<div class="col-xs-3">
+						<input placeholder="Nombres" name="nombresConve"
+							id="inputNombresAcompConve"
+							class="form-control input-sm required" type="text">
+					</div>
+					<div class="col-xs-2">
+						<input placeholder="A. Paterno" name="apePaternoConve" type="text"
+							class="form-control input-sm required"
+							id="inputApePaternoAcompConve" size="6">
+					</div>
+					<div class="col-xs-2">
+						<input placeholder="A. Materno" name="apeMaternoConve" type="text"
+							class="form-control input-sm required"
+							id="inputApeMaternoAcompConve">
+					</div>
+					<div class="col-xs-5">
+						<div class="input-group">
+							<span class="input-group-btn"> <select class="input-sm"
+								id="inputTipoDocAcompConve">
+									<option>DNI</option>
+									<option title="Pasaporte">PASA</option>
+							</select>
+							</span> <input placeholder="Número" type="text"
+								class="form-control input-sm required number" name="numeroConve"
+								id="inputDocAcompConve"> <input type="submit"
+								class="hidden" id="btnAgregarAcomp-Conve" /> <span
+								class="input-group-addon"> <a href="javascript:void(0);"
+								id="btnAddAcompConve"
+								onclick="$('#btnAgregarAcomp-Conve').trigger('click');"> <span
+									class="glyphicon glyphicon-plus"></span> <span
+									class="glyphicon glyphicon-user"></span></a>
+							</span>
+						</div>
 					</div>
 				</div>
-			</div>
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>Nombres</th>
-						<th>A. Paterno</th>
-						<th>A. Materno</th>
-						<th>Documento</th>
-						<th>Nº</th>
-						<th>Mod.</th>
-						<th>Elim.</th>
-					</tr>
-				</thead>
-				<tbody id="tablaAcompConve">
+			</form>
+			<form>
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>Nombres</th>
+							<th>A. Paterno</th>
+							<th>A. Materno</th>
+							<th>Documento</th>
+							<th>Nº</th>
+							<th>Elim.</th>
+						</tr>
+					</thead>
+					<tbody id="tablaAcompConve">
 
-				</tbody>
-			</table>
-			<div class="row">
-				<div class="col-md-8 col-md-offset-4 modal-footer">
-					<button type="button" class="btn btn-primary btnReservar"
-						id="btnReservarConve">Reservar</button>
-					<button type="button" class="btn btn-default">Cancelar</button>
+					</tbody>
+				</table>
+				<div class="row">
+					<div class="col-md-8 col-md-offset-4 modal-footer">
+						<input type="hidden" name="ambienteConve" id="ambienteConve" />
+						<button type="button" class="btn btn-primary btnReservar"
+							id="btnReservarConve">Reservar</button>
+						<button type="button" class="btn btn-default"
+							onclick="javascript:history.go(-1);">Cancelar</button>
+					</div>
 				</div>
-			</div>
-
+			</form>
 		</div>
 		<!-- Fin de la tabla acompañantes -->
 	</div>
@@ -314,41 +314,46 @@
 		class="tab-pane fade <c:if test="${flagBusquedaHome eq 3}">active in</c:if>"
 		id="tthree">
 		<br />
-		<table>
-			<tr>
-				<td>
-					<div class="input-group date " id="e" data-date="2014-01-21"
-						data-date-format="yyyy-mm-dd">
-						<span class="input-group-addon">Desde</span> <input
-							class="form-control input-sm" id="desdeAmbiente" type="text" />
-						<span class="input-group-addon"><i
-							class="glyphicon glyphicon-calendar"></i></span>
-					</div>
-				</td>
-				<td>
-					<div class="input-group date " id="e" data-date="2014-01-22"
-						data-date-format="yyyy-mm-dd">
-						<span class="input-group-addon">Hasta</span> <input
-							class="form-control input-sm" id="hastaAmbiente" type="text">
-						<span class="input-group-addon"><i
-							class="glyphicon glyphicon-calendar"></i></span>
-					</div>
-				</td>
-				<td>
-					<button type="button"
-						class="btn btn-primary btn-sm btnEnterAmbiente">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</td>
-			</tr>
-		</table>
+		<form>
+			<table>
+				<tr>
+					<td>
+						<div class="input-group date " id="e" data-date="2014-01-21"
+							data-date-format="yyyy-mm-dd">
+							<span class="input-group-addon">Desde</span> <input
+								class="form-control input-sm required" name="desdeAmbiente"
+								id="desdeAmbiente" type="text" /> <span
+								class="input-group-addon"><i
+								class="glyphicon glyphicon-calendar"></i></span>
+						</div>
+					</td>
+					<td>
+						<div class="input-group date " id="e" data-date="2014-01-22"
+							data-date-format="yyyy-mm-dd">
+							<span class="input-group-addon">Hasta</span> <input
+								class="form-control input-sm required"
+								greaterThan="#desdeAmbiente" name="hastaAmbiente"
+								id="hastaAmbiente" type="text"> <span
+								class="input-group-addon"><i
+								class="glyphicon glyphicon-calendar"></i></span>
+						</div>
+					</td>
+					<td>
+						<button type="submit"
+							class="btn btn-primary btn-sm btnEnterAmbiente">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</td>
+				</tr>
+			</table>
+		</form>
 		<br />
 		<div class="row hidden" id="panel-tab-ambiente">
-			<div class="alert alert-danger">
-				<h4>Aviso</h4>
+			<blockquote>
+				<h3>Aviso:</h3>
 				<p>Para poder reservar un ambiente necesitas haber reservado una
 					cabaña</p>
-			</div>
+			</blockquote>
 			</br>
 			<legend class="text-primary">
 				Ambientes disponibles <span class="glyphicon glyphicon-list-alt"></span>
@@ -356,16 +361,21 @@
 			<div class="panel-body">
 				<div class="row" id="contenedorAmbiente"></div>
 			</div>
-			<div class="row">
+		</div>
+		<form>
+			<div class="row hidden" id="panel-acompanantes-amb-searched">
 				<div class="col-md-8 col-md-offset-4 modal-footer">
-					<button type="button" class="btn btn-primary btnReservar"
+					<input type="text" class="hidden required" name="ambienteAmbiente"
+						id="ambienteAmbiente" />
+					<button type="submit" class="btn btn-primary btnReservar"
 						id="btnReservarAmbiente">Reservar</button>
-					<button type="button" class="btn btn-default">Cancelar</button>
+					<button type="button" class="btn btn-default"
+						onclick="javascript:history.go(-1);">Cancelar</button>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
-	<!-- tab tres -->
+	<!-- fin tab tres -->
 </div>
 <!-- Modal -->
 <div id="modalQuestion" class="modal fade" tabindex="-1"
@@ -393,11 +403,11 @@
 	</div>
 	<div class="modal-body">
 		<form class="cuerpo-modal">
-			<label>Usuario: </label><input type="text" id="userInput" /><br /> <label>Contrasena</label><input
-				type="text" id="pwdInput" /><br /> <input type="button"
-				value="Identificarse" id="btnLoginReserva" data-container="body"
-				data-toggle="popover" data-placement="bottom" /> <input
-				type="button" value="Olvidé contraseña" />
+			<label>Usuario: </label><input type="text" id="userInput" /><br />
+			<label>Contrasena</label><input type="text" id="pwdInput" /><br />
+			<input type="button" value="Identificarse" id="btnLoginReserva"
+				data-container="body" data-toggle="popover" data-placement="bottom" />
+			<input type="button" value="Olvidé contraseña" />
 		</form>
 		<br />
 		<div class="alert alert-danger hidden" id="remplazoDangerLoginCab">
@@ -415,23 +425,26 @@
 		<h4 class="modal-title">Registrate, falta poco para disfrutes de
 			nuestros servicios</h4>
 	</div>
-	<div class="modal-body">
-		<div class="panel panel-success">
-			<div class="panel-heading">
-				<h3 class="panel-title">Registro clasico.</h3>
-			</div>
-			<div class="panel-body">
-				<form>
+	<form id="registroPersonaXMSS">
+		<div class="modal-body">
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					<h3 class="panel-title">Registro clasico.</h3>
+				</div>
+				<div class="panel-body">
 					<table>
 						<tr>
 							<td>Nombre</td>
-							<td><input type="text" name="nombresr"></td>
+							<td class="inputval"><input type="text" name="nombresr"
+								class="required"></td>
 							<td>A. Paterno</td>
-							<td><input type="text" name="apePaternor" /></td>
+							<td class="inputval"><input type="text" name="apePaternor"
+								class="required" /></td>
 						</tr>
 						<tr>
 							<td>A. Materno</td>
-							<td><input type="text" name="apeMaternor" /></td>
+							<td class="inputval"><input type="text" name="apeMaternor"
+								class="required" /></td>
 							<td>Tipo de Documento</td>
 							<td><select>
 									<option>DNI</option>
@@ -440,31 +453,38 @@
 						</tr>
 						<tr>
 							<td>Nº Documento</td>
-							<td><input type="text" name="numDocumentor"></td>
+							<td class="inputval"><input type="text" name="numDocumentor"
+								id="numDocumentor" class="required number"></td>
 							<td>Confirmar Nº Documento</td>
-							<td><input type="text" name="conifNumDocumentor"></td>
+							<td class="inputval"><input type="text"
+								name="conifNumDocumento" class="required number"
+								title="No coincide" equalTo="#numDocumentor"></td>
 						</tr>
 						<tr>
 							<td>Dirección</td>
-							<td><input type="text" name="direccionr" /></td>
+							<td class="inputval"><input type="text" name="direccionr"
+								class="required" /></td>
 							<td>Teléfono</td>
-							<td><input type="text" name="telfr"></td>
+							<td class="inputval"><input type="text" name="telfr"
+								class="required number"></td>
 						</tr>
 						<tr>
 							<td>Email</td>
-							<td><input type="text" name="emailr"></td>
+							<td class="inputval"><input type="text" name="emailr"
+								id="emailr" class="required email"></td>
 							<td>Confirmar Email</td>
-							<td><input type="text" name="confemailr"></td>
+							<td class="inputval"><input type="text" name="confemailr"
+								class="required email" equalTo="#emailr"></td>
 						</tr>
 					</table>
-				</form>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<button type="button" id="btnRegistrarse" class="btn btn-primary">Registrarse</button>
+		<div class="modal-footer">
+		<button type="submit" id="btnRegistrarse" class="btn btn-primary">Registrarse</button>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	</div>
+		</div>
+	</form>
 </div>
 <div id="modalReservasActivas" class="modal fade" tabindex="-1"
 	style="display: none;">
@@ -495,13 +515,15 @@
 	</div>
 	<div class="modal-footer">
 		<div class="row">
-			<button type="button" class="btn btn-danger nroReservaSelected"
+			<button type="button"
+				class="btn btn-danger nroReservaSelectedReservaMain"
 				id="btnNuevoContenedor" data-action="nuevoContenedor">Crear
 				nuevo contenedor de Reserva</button>
 			<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 		</div>
 	</div>
 </div>
+
 <div id="modalResultado" class="modal fade" tabindex="-1"
 	style="display: none;">
 	<div class="modal-header">
@@ -510,18 +532,41 @@
 		<h4 class="modal-title">¡Felicitaciones!</h4>
 	</div>
 	<div class="modal-body">
-		<div class="alert alert-success" id="remplazoSuccessResultCab">
-			<strong>Well done!</strong> Debido a Pellentesque in ipsum id orci
-			porta dapibus. Donec sollicitudin molestie malesuada.
+		<div class="hidden" id="msjRegistroPersona">
+			<dl class="dl-horizontal">
+				<dt>Nombres:</dt>
+				<dd id="llblNombres"></dd>
+				<dt>Email:</dt>
+				<dd id="llblEmail"></dd>
+				<br>
+				<div class="well well-sm">
+					<dt>Usuario:</dt>
+					<dd id="llblUser"></dd>
+					<dt>Contraseña:</dt>
+					<dd id="llblPwd"></dd>
+				</div>
+			</dl>
 		</div>
-		<div class="alert alert-danger hidden" id="remplazoDangerResultCab">
-			<strong>Oh snap!</strong> Debido a Pellentesque in ipsum id orci
-			porta dapibus. Donec sollicitudin molestie malesuada.
+		<div class="hidden" id="msjReserva">
+			<div class="page-header-customed">
+				<h1 id="llblidReserva">
+				</h1>
+			</div>
+			<dl class="dl-horizontal">
+				<br>
+				<div class="well well-sm">
+					<dt>Desde:</dt>
+					<dd id="llblDesde"></dd>
+					<dt>Hasta:</dt>
+					<dd id="llblHasta"></dd>
+				</div>
+			</dl>
 		</div>
 	</div>
 	<div class="modal-footer">
 		<div class="row">
-			<a type="button" class="btn btn-danger" href="agregarReserva.action">Finalizar</a>
+			<a type="button" class="btn btn-danger hidden" href="agregarReserva.action" id="idFinA">Finalizar</a>
+			<a type="button" class="btn btn-danger hidden" href="gestionarReserva.action" id="idFinB">Finalizar</a>
 		</div>
 	</div>
 </div>

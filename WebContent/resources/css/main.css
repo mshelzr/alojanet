@@ -68,40 +68,46 @@ footer a:hover {
 
 /* this begin*/
 .thumbnail.sinRaya,.thumbnail.panel-footer.btnEscogerHab {
-text-decoration: none;
+	text-decoration: none;
 }
 
 .btn.btn-default.btn-lg {
-float: right;
-padding: 28px 28px 28px 28px;
+	float: right;
+	padding: 28px 28px 28px 28px;
 }
 
 /* reserva convencional */
-.listConScroll{
-    max-height: 300px;
-    overflow-y:scroll; 
+.listConScroll {
+	max-height: 300px;
+	overflow-y: scroll;
 }
 
 /* cs bootstrap */
 .bs-callout {
-margin: auto;
-padding: 20px;
-border-left: 3px solid #eee;
+	margin: auto;
+	padding: 20px;
+	border-left: 3px solid #eee;
 }
+
 .bs-callout-danger {
-background-color: #fdf7f7;
-border-color: #eed3d7;
+	background-color: #fdf7f7;
+	border-color: #eed3d7;
 }
+
 .bs-callout-danger h4 {
-color: #b94a48;
+	color: #b94a48;
 }
 
 /*checkin */
 .tamanoModalAcompCheckin {
-   width: 800px;
+	width: 800px;
 }
 
 /*  */
-.divParaModificarInputs{
-background-color:#4f9fcf;
+.divParaModificarInputs {
+	background-color: #4f9fcf;
+}
+
+.page-header-customed {
+	border-bottom: 1px solid #eee;
 }

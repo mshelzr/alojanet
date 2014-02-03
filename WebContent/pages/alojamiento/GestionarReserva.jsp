@@ -1,64 +1,41 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<input type="hidden" id="flagPagGestionar" value="true" />
-
-<c:if test="${cookie.idPerfil.value ne 1}">
-	<div class="row panel-busqueda">
-	<!-- row de busqueda -->
-	<legend class="text-primary">
-		Busqueda de reserva <span class="glyphicon glyphicon-search"></span>
-	</legend>
-	<div class="col-xs-4">
-		<div class="input-group">
-			<span class="input-group-addon">Nº Reserva </span> <input type="text"
-				class="form-control input-sm" id="idReservaInput"> <span
-				class="input-group-addon"> <a data-toggle="modal" href="#"
-				id="btnBuscarByIdReserva" class="btnModalSearched"> <span
-					class="glyphicon glyphicon-search"></span></a>
-			</span>
-		</div>
-		<!-- /input-group -->
-	</div>
-	<!-- /.col-lg- -->
-	<div class="col-xs-4">
-		<div class="input-group">
-			<span class="input-group-btn"> <select class="input-sm"
-				id="comboNombreSelect">
-					<option value="apellido">Apellido</option>
-					<option value="razonsocial">Empresa</option>
-			</select>
-			</span> <input type="text" class="form-control input-sm"
-				id="nombresBuscarInput" /> <span class="input-group-addon">
-				<a data-toggle="modal" href="#" id="btnBuscarByNombres"
-				class="btnModalSearched"> <span
-					class="glyphicon glyphicon-search"></span></a>
-			</span>
-		</div>
-		<!-- /input-group -->
-	</div>
-	<!-- /.col-lg- -->
-	<div class="col-xs-4">
-		<div class="input-group">
-			<span class="input-group-btn"> <select class="input-sm"
-				id="comboDocSelect">
-					<option value="dni">DNI</option>
-					<option value="pasa" title="Pasaporte">PASA</option>
-					<option value="ruc">RUC</option>
-			</select>
-			</span> <input type="text" class="form-control input-sm" id="docBuscarInput" />
-			<span class="input-group-addon"> <a data-toggle="modal"
-				href="#" id="btnBuscarByNumDocumento" class="btnModalSearched">
-					<span class="glyphicon glyphicon-search"></span>
-			</a>
-			</span>
-		</div>
-		<!-- /input-group -->
-	</div>
-	<!-- /.col-lg- -->
+<input type="hidden" id="paginaActual" value="gestionar" />
+<input type="hidden" id="idDetalleReserva" />
+<div class="page-header-customed">
+	<h1 id="type">
+		Gestionar <small>Reserva</small>
+	</h1>
 </div>
-<!-- /.row busqueda-->
-</c:if>
+<form>
+	<div class="row panel-busqueda">
+		<br />
+		<legend class="text-primary">
+			Busqueda de reserva <span class="glyphicon glyphicon-search"></span>
+		</legend>
+		<div class="col-xs-3">
+			<input placeholder="Nombres" id="nombres-search"
+				class="form-control input-sm" type="text">
+		</div>
+		<div class="col-xs-2">
+			<input placeholder="A. Paterno" type="text"
+				class="form-control input-sm" id="apePaterno-search" size="6">
+		</div>
+		<div class="col-xs-2">
+			<input placeholder="A. Materno" type="text"
+				class="form-control input-sm" id="apeMaterno-search">
+		</div>
+		<div class="col-xs-2">
+			<input placeholder="Dni, ruc, ..." type="text"
+				class="form-control input-sm" id="numero-search">
+		</div>
+		<button type="button" class="btn btn-primary btn-sm"
+			id="btnBusquedaReserva">
+			Buscar <span class="glyphicon glyphicon-search"></span>
+		</button>
+	</div>
+</form>
 <div class="modal fade" id="modalSearched" tabindex="-1" role="dialog"
 	aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
@@ -67,7 +44,6 @@
 		<h4 class="modal-title">Resultado de busqueda</h4>
 	</div>
 	<div class="modal-body">
-
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -84,30 +60,29 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-		<!--<button type="button" class="btn btn-primary">Save changes</button> -->
 	</div>
 </div>
 
-<div class="panel-group panel-cabs-searched panel-reserva-encontrada hidden"
+<div
+	class="panel-group panel-cabs-searched panel-reserva-encontrada hidden"
 	id="panel-1">
-	<legend class="text-primary">
-		Gestión de Reserva <span class="glyphicon glyphicon-lock"></span>
-	</legend>
+	<br />
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<a class="panel-title" data-toggle="collapse"
-				data-parent="#panel-1" href="#panel-element-0">Reserva
-				 <span class="glyphicon glyphicon-tasks"></span>
+			<a class="panel-title" data-toggle="collapse" data-parent="#panel-1"
+				href="#panel-element-0">Contenedor de reserva <span
+				class="glyphicon glyphicon-tasks"></span>
 			</a>
 		</div>
-		<div id="panel-element-0" class="panel-collapse collapse in" >
+		<div id="panel-element-0" class="panel-collapse collapse in">
 			<div class="panel-body">
 				<br />
 				<div class="row">
 					<div class="col-xs-5">
 						<div class="input-group input-group-lg">
 							<span class="input-group-addon">Código de la reserva</span> <input
-								type="text" class="form-control" id="lblIdReserva" value="${m}" disabled />
+								type="text" class="form-control" id="lblIdReserva" value="${m}"
+								disabled />
 						</div>
 					</div>
 				</div>
@@ -126,7 +101,7 @@
 							<th>Estado.</th>
 						</tr>
 					</thead>
-					<tbody id="rowDetalleReserva">				
+					<tbody id="rowDetalleReserva">
 					</tbody>
 				</table>
 			</div>
@@ -136,81 +111,11 @@
 		<div class="col-md-8 col-md-offset-4 modal-footer">
 			<a type="button" class="btn btn-primary" href="agregarReserva.action">Agregar
 				nueva reserva</a> <a type="button" class="btn btn-default"
-				href="gestionarReserva.action">Atrás</a>
+				href="javascript:history.go(-1);">Cancelar</a>
 		</div>
 	</div>
-  </div>
+</div>
 
-<c:if test="${cookie.idPerfil.value eq 1}">
-<div class="panel-group panel-cabs-searched panel-reserva-encontrada"
-	id="panel-2">
-	<legend class="text-primary">
-		Gestión de Reserva <span class="glyphicon glyphicon-lock"></span>
-	</legend>	
-	<c:forEach items="${count}" var="m" varStatus="status">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<a class="panel-title" data-toggle="collapse"
-				data-parent="#panel-2" href="#panel-element-${status.count}">Reserva
-				# ${status.count} <span class="glyphicon glyphicon-tasks"></span>
-			</a>
-		</div>
-		<div id="panel-element-${status.count}" class="panel-collapse collapse <c:if test="${status.index eq 0}">in</c:if>" >
-			<div class="panel-body">
-				<br />
-				<div class="row">
-					<div class="col-xs-5">
-						<div class="input-group input-group-lg">
-							<span class="input-group-addon">Código de la reserva</span> <input
-								type="text" class="form-control" id="lblIdReserva" value="${m}" disabled />
-						</div>
-					</div>
-				</div>
-				<br />
-				<table class="table table-hover">
-					<legend class="text-primary">
-						Datos de la reserva <span class="glyphicon glyphicon-list-alt"></span>
-					</legend>
-					<thead>
-						<tr>
-							<th>Nº Ambiente</th>
-							<th><span class="glyphicon glyphicon-user"></span> Actual</th>
-							<th>F. Inicio</th>
-							<th>F. Fin</th>
-							<th>Info.</th>
-							<th>Estado.</th>
-						</tr>
-					</thead>
-					<tbody id="rowDetalleReserva">				
-						<c:forEach items="${listaReservas}" var="n">
-							<!-- idreserva, idDetalleReserva, numberoLocal, cabLocal, habLocal,count,acomps,fec_inicio,fec_fin,estado -->
-							<c:if test="${n.idreserva eq m }">
-								<tr>
-									<td>${n.cabLocal}/${n.habLocal}</td>
-									<td>${n.count}/${n.acomps}</td>
-									<td>${n.fec_inicio}</td>
-									<td>${n.fec_fin}</td>
-									<td><a class="btnModalDetalleReserva" data-toggle="modal" href="#" data-action="${n.idDetalleReserva}"><span
-											class="glyphicon glyphicon-eye-open"></span></a></td>
-									<td>${n.estado}</td>
-								</tr>
-							</c:if>
-						</c:forEach>
-						</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	</c:forEach>
-	<div class="row">
-		<div class="col-md-8 col-md-offset-4 modal-footer">
-			<a type="button" class="btn btn-primary" href="agregarReserva.action">Agregar
-				nueva reserva</a> <a type="button" class="btn btn-default"
-				href="gestionarReserva.action">Atrás</a>
-		</div>
-	</div> <!-- btns footer-->
-  </div>
-</c:if>
 <!-- MODAL DETALL_RESERVA -->
 <div class="modal fade" id="modalDetalleReserva" tabindex="1"
 	role="dialog" data-width="760" aria-labelledby="myModalLabel"
@@ -222,13 +127,14 @@
 	</div>
 	<div class="modal-body">
 		<!-- cuerpo del modal -->
+		<form>
 		<table>
 			<tr>
 				<td>
 					<div class="input-group date " id="e" data-date="16-01-2014"
 						data-date-format="dd-mm-yyyy">
 						<span class="input-group-addon">Desde</span> <input
-							class="form-control input-sm" id="lblDesde" type="text" /> <span
+							class="form-control input-sm required" id="lblDesde" name="lblDesde" type="text" /> <span
 							class="input-group-addon"><i
 							class="glyphicon glyphicon-calendar"></i></span>
 					</div>
@@ -237,13 +143,13 @@
 					<div class="input-group date " id="e2" data-date="16-02-2014"
 						data-date-format="dd-mm-yyyy">
 						<span class="input-group-addon">Hasta</span> <input
-							class="form-control input-sm" type="text" id="lblHasta">
+							class="form-control input-sm required" greaterThan="#lblDesde" name="lblHasta" type="text" id="lblHasta">
 						<span class="input-group-addon"><i
 							class="glyphicon glyphicon-calendar"></i></span>
 					</div>
 				</td>
 				<td>
-					<button type="button" class="btn btn-primary btn-sm active"
+					<button type="submit" class="btn btn-primary btn-sm active"
 						data-action="" id="btnConsultaDisponibilidad">
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
@@ -259,6 +165,7 @@
 				</td>
 			</tr>
 		</table>
+		</form>
 		<br />
 
 		<legend class="text-primary">
@@ -281,7 +188,44 @@
 				<p id="lblDescripcion"></p>
 			</div>
 		</div>
-		<br /> <br />
+		<br />
+		<form>		
+		<legend class="text-primary panelAgregarAcomp">
+			Agregar nuevo acompañante <span class="glyphicon glyphicon-plus"></span>
+			<span class="glyphicon glyphicon-user"></span>
+		</legend>
+		<div class="row hidden panelAgregarAcomp">
+			<div class="col-xs-3">
+				<input placeholder="Nombres" id="inputNombresAcomp" name="nombreAddAcomp"
+					class="form-control input-sm required" type="text">
+			</div>
+			<div class="col-xs-2">
+				<input placeholder="A. Paterno" type="text" name="apePaternoAddAcomp"
+					class="form-control input-sm required" id="inputApePaternoAcomp" size="6">
+			</div>
+			<div class="col-xs-2">
+				<input placeholder="A. Materno" type="text" name="apeMaternoAddAcomp"
+					class="form-control input-sm required" id="inputApeMaternoAcomp">
+			</div>
+			<div class="col-xs-5">
+				<div class="input-group">
+					<span class="input-group-btn"> <select class="input-sm"
+						id="inputTipoDocAcomp">
+							<option>DNI</option>
+							<option title="Pasaporte">PASA</option>
+					</select>
+					</span> <input placeholder="Número" type="text" name="numeroAddAcomp"
+						class="form-control input-sm required number" id="inputDocAcomp"> <span
+						class="input-group-addon"> 
+						<input type="submit" class="hidden" id="btnAgregarAcomp" />
+						<a href="javascript:void(0);" onclick="$('#btnAgregarAcomp').trigger('click');" > <span class="glyphicon glyphicon-plus"></span>
+							<span class="glyphicon glyphicon-user"></span></a>
+					</span>
+				</div>
+			</div>
+		</div>
+		</form>
+		 <br />
 		<table class="table table-hover">
 			<legend class="text-primary">
 				Acompañantes <span class="glyphicon glyphicon-user"></span>
@@ -293,55 +237,17 @@
 					<th>A. Materno</th>
 					<th>Documento</th>
 					<th>Nº</th>
-					<th>Mod.</th>
 					<th>Elim.</th>
 				</tr>
 			</thead>
-			<tbody id="contenerParaAgregarAcompCheckIn">
+			<tbody id="contenerParaAgregarAcomp">
 
 			</tbody>
-		</table>
-		<!-- si hay espacio en la hab se muestra el agregar (con un poderoso if ()) -->
-		<div class="row hidden" id="panelAgregarAcompCheckIn">
-			<legend class="text-primary">
-				Agregar nuevo acompañante <span class="glyphicon glyphicon-plus"></span>
-				<span class="glyphicon glyphicon-user"></span>
-			</legend>
-			<div class="col-xs-3">
-				<input placeholder="Nombres" id="inputNombresAcomp"
-					class="form-control input-sm" type="text">
-			</div>
-
-			<div class="col-xs-2">
-
-				<input placeholder="A. Paterno" type="text"
-					class="form-control input-sm" id="inputApePaternoAcomp" size="6">
-			</div>
-			<div class="col-xs-2">
-
-				<input placeholder="A. Materno" type="text"
-					class="form-control input-sm" id="inputApeMaternoAcomp">
-			</div>
-			<div class="col-xs-5">
-				<div class="input-group">
-					<span class="input-group-btn"> <select class="input-sm"
-						id="inputTipoDocAcomp">
-							<option>DNI</option>
-							<option title="Pasaporte">PASA</option>
-					</select>
-					</span> <input placeholder="Número" type="text"
-						class="form-control input-sm" id="inputDocAcomp"> <span
-						class="input-group-addon"> <a href="javascript:void(0);"
-						id="btnAgregarAcomp"> <span class="glyphicon glyphicon-plus"></span>
-							<span class="glyphicon glyphicon-user"></span></a>
-					</span>
-				</div>
-			</div>
-		</div>
+		</table>		
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-danger" data-dismiss="modal"
-			id="btnSaveModalCheckIn">Guardar Cambios</button>
+			id="btnSaveModalGestionar">Guardar Cambios</button>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 	</div>
 </div>

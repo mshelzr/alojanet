@@ -28,6 +28,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 						<property name="url" value="jdbc:mysql://localhost:3306/alojamientodb" />
 						<property name="username" value="root" />
 						<property name="password" value="mysql" />
+<!-- 						<property name="url" value="jdbc:mysql://ec2-50-19-213-178.compute-1.amazonaws.com:3306/alojamientodb" /> -->
+<!-- 						<property name="username" value="scotti" /> -->
+<!-- 						<property name="password" value="pwd2ciber1" /> -->
 			</dataSource>
 		</environment>
 	</environments>
@@ -37,4 +40,3 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="mybatis/mapper.xml" />
 	</mappers>
 </configuration>
-

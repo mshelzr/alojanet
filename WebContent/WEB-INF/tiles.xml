@@ -108,5 +108,10 @@
     <definition name="gestionarReserva" extends="baseLayout">
         <put-attribute name="title" value="Gestionar Reserva"/>
         <put-attribute name="body" value="/pages/alojamiento/GestionarReserva.jsp"/>
-    </definition> 
+    </definition>
+    
+    <definition name="gestionarReservaCliente" extends="baseLayout">
+        <put-attribute name="title" value="Gestionar Reserva"/>
+        <put-attribute name="body" value="/pages/alojamiento/GestionarReservaCliente.jsp"/>
+    </definition>  
 </tiles-definitions>
