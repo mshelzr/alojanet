@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dawi">
+
+	<resultMap id="perfilMap" type="perfilMybatis">
+		<id property="idPerfil" column="pf_idPerfil" />
+		<result property="descripcion" column="pf_descripcion" />
+	</resultMap>
+
+	<resultMap id="tipoDocumentoMap" type="tipoDocumentoMybatis">
+		<id property="idTipoDocumento" column="td_idTipoDocumento" />
+		<result property="descripcion" column="td_descripcion" />
+	</resultMap>
+
+	<resultMap id="personaMap" type="personaMybatis">
+		<id property="idPersona" column="p_idPersona" />
+		<result property="nombres" column="p_nombres" />
+		<result property="apePaterno" column="p_apePaterno" />
+		<result property="apeMaterno" column="p_apeMaterno" />
+		<result property="numDocumento" column="p_numDocumento" />
+		<result property="telf" column="p_telf" />
+		<result property="cel" column="p_cel" />
+		<result property="email" column="p_email" />
+		<association property="tipoDocumentoDTO" resultMap="tipoDocumentoMap" />
+	</resultMap>
+
+	<resultMap id="usuarioMap" type="usuarioMybatis">
+		<id property="idUsuario" column="u_idUsuario" />
+		<result property="user" column="u_user" />
+		<result property="pwd" column="u_pwd" />
+		<association property="perfilDTO" resultMap="perfilMap" />
+		<association property="personaDTO" resultMap="personaMap" />
+	</resultMap>
+
+	<resultMap id="ambientePadreMap" type="ambienteMybatis">
+		<id property="idAmbiente" column="ap_idAmbiente" />
+		<result property="descripcion" column="ap_descripcion" />
+		<result property="precio" column="ap_precio" />
+		<result property="numberoLocal" column="ap_numberoLocal" />
+		<result property="urlimagen" column="ap_urlimagen" />
+		<result property="piso" column="ap_piso" />
+		<result property="estado" column="ap_estado" />
+		<result property="cantCuartos" column="ap_cantCuartos" />
+		<result property="capacidadPersonas" column="ap_capacidadPersonas" />
+		<result property="cantAsientosConPrivilegios" column="ap_cantAsientosconPrivilegios" />
+		<result property="flagMiniBar" column="ap_flagMiniBar" />
+		<result property="flagAmbienteOferta" column="ap_flagAmbienteOferta" />
+		<result property="codAmbiente" column="ap_codAmbiente" />
+		<result property="cantMinReservasParaPromocion" column="ap_cantMinReservasParaPromocion" />
+	</resultMap>
+
+	<resultMap id="ambienteMap" type="ambienteMybatis">
+		<id property="idAmbiente" column="a_idAmbiente" />
+		<result property="descripcion" column="a_descripcion" />
+		<result property="precio" column="a_precio" />
+		<result property="numberoLocal" column="a_numberoLocal" />
+		<result property="urlimagen" column="a_urlimagen" />
+		<result property="piso" column="a_piso" />
+		<result property="estado" column="a_estado" />
+		<result property="cantCuartos" column="a_cantCuartos" />
+		<result property="capacidadPersonas" column="a_capacidadPersonas" />
+		<result property="cantAsientosConPrivilegios" column="a_cantAsientosconPrivilegios" />
+		<result property="flagMiniBar" column="a_flagMiniBar" />
+		<result property="flagAmbienteOferta" column="a_flagAmbienteOferta" />
+		<result property="cantMinReservasParaPromocion" column="a_cantMinReservasParaPromocion" />
+		<result property="codAmbiente" column="a_codAmbiente" />
+		<association property="ambienteDTO" resultMap="ambientePadreMap" />
+	</resultMap>
+
+	<!-- FINDERS AND DMLS OPERATIONS -->
+
+	<select id="q_validarUsuario" parameterType="usuarioMybatis"
+		resultMap="usuarioMap">
+		SELECT u.idUsuario as u_idUsuario,u.user as u_user,u.pwd as
+		u_pwd,
+		p.idPersona as p_idPersona,p.nombres as p_nombres,p.apePaterno
+		as p_apePaterno,p.apeMaterno as p_apeMaterno,p.numDocumento as
+		p_numDocumento,p.telf as p_telf,p.cel as p_cel,p.email as p_email,
+		td.idTipoDocumento as td_idTipoDocumento,td.descripcion as
+		td_descripcion,pf.idPerfil as pf_idPerfil,pf.descripcion as
+		pf_descripcion
+		FROM T_USUARIO u JOIN T_PERSONA p
+		on u.idPersona=p.idPersona JOIN T_TIPODOCUMENTO td
+		on
+		p.idTipoDocumento=td.idTipoDocumento JOIN T_PERFIL pf
+		on
+		u.idPerfil=pf.idPerfil
+		WHERE user=#{user}
+	</select>
+
+	<!-- llamada usando procedure de mysql -->
+	<select id="q_menu" resultType="menuMybatis" statementType="CALLABLE">
+		{ CALL tree_get_branch(1,NULL," ",#{idPerfil, mode=IN,
+		jdbcType=INTEGER})}
+	</select>
+
+	<!-- PARAMETROS PERSONALIZADOS -->
+	<parameterMap type="java.util.HashMap" id="rangoParam">
+		<parameter property="desde" javaType="java.lang.String" />
+		<parameter property="hasta" javaType="java.lang.String" />
+		<parameter property="param1" javaType="java.lang.String" />
+	</parameterMap>
+
+	<parameterMap type="java.util.HashMap" id="parametroBuilder">
+		<parameter property="param1" javaType="java.lang.String" />
+		<parameter property="param2" javaType="java.lang.String" />
+		<parameter property="param3" javaType="java.lang.String" />
+		<parameter property="param4" javaType="java.lang.String" />
+	</parameterMap>
+
+	<!-- //////////// -->
+	<!-- BUSQUEDA DE AMBIENTES -->
+	<select id="q_buscarCabsAbrirReserva" parameterMap="rangoParam"
+		resultMap="ambienteMap">
+		select a.idambiente as a_idambiente,a.descripcion as a_descripcion,a.precio
+		as a_precio,a.numberolocal as a_numberolocal,a.urlimagen as
+		a_urlimagen,a.piso as a_piso,a.estado as a_estado,a.cantcuartos as
+		a_cantcuartos,a.capacidadpersonas as
+		a_capacidadpersonas,a.cantasientosconprivilegios as
+		a_cantasientosconprivilegios,a.flagminibar as
+		a_flagminibar,a.flagambienteoferta as
+		a_flagambienteoferta,a.cantminreservasparapromocion as
+		a_cantminreservasparapromocion,a.codambiente as a_codambiente,
+		ab2.idambiente as ap_idambiente,ab2.descripcion as
+		ap_descripcion,ab2.precio as ap_precio,ab2.numberolocal as
+		ap_numberolocal,ab2.urlimagen as ap_urlimagen,ab2.piso as
+		ap_piso,ab2.estado as ap_estado,ab2.cantcuartos as
+		ap_cantcuartos,ab2.capacidadpersonas as
+		ap_capacidadpersonas,ab2.cantasientosconprivilegios as
+		ap_cantasientosconprivilegios,ab2.flagminibar as
+		ap_flagminibar,ab2.flagambienteoferta as
+		ap_flagambienteoferta,ab2.cantminreservasparapromocion as
+		ap_cantminreservasparapromocion,ab2.codambiente as ap_codambiente
+		FROM T_AMBIENTE A JOIN T_AMBIENTE AB2
+		ON A.IDAMBIENTEPADRE=AB2.IDAMBIENTE
+		WHERE A.IDAMBIENTE NOT IN(SELECT A2.IDAMBIENTE
+		FROM T_AMBIENTE A2 JOIN T_DETALLERESERVA DR
+		ON A2.IDAMBIENTE=DR.IDAMBIENTE
+		WHERE A2.CODAMBIENTE=2 AND #{desde} AND #{hasta}
+		BETWEEN FEC_INICIO AND
+		FEC_FIN)
+		AND A.CODAMBIENTE=2;
+	</select>
+
+	<select id="q_buscarConveAbrirReserva" parameterMap="rangoParam"
+		resultType="ambienteMybatis">
+		SELECT A.* FROM T_AMBIENTE A
+		WHERE A.IDAMBIENTE NOT IN(SELECT A2.IDAMBIENTE
+		FROM T_AMBIENTE A2 LEFT JOIN T_DETALLERESERVA DR
+		ON
+		A2.IDAMBIENTE=DR.IDAMBIENTE
+		WHERE A2.CODAMBIENTE=3 AND #{desde} AND
+		#{hasta}
+		BETWEEN FEC_INICIO AND FEC_FIN )
+		AND A.CODAMBIENTE=3;
+	</select>
+
+	<select id="q_buscarAmbAbrirReserva" parameterMap="rangoParam"
+		resultType="ambienteMybatis">
+		SELECT A.* FROM T_AMBIENTE A
+		WHERE A.IDAMBIENTE NOT IN(SELECT A2.IDAMBIENTE
+		FROM T_AMBIENTE A2 LEFT JOIN T_DETALLERESERVA DR
+		ON
+		A2.IDAMBIENTE=DR.IDAMBIENTE
+		WHERE A2.CODAMBIENTE=4 AND #{desde} AND
+		#{hasta}
+		BETWEEN FEC_INICIO AND FEC_FIN)
+		AND A.CODAMBIENTE=4
+	</select>
+
+	<!-- LISTAR LAS RESERVAS DEL USUARIO -->
+	<select id="q_listarReservasByIdUsuario" resultType="hashMap">
+		select r.idreserva,dr.idDetalleReserva,aP.numberoLocal as
+		cabLocal,a.numberoLocal as habLocal,
+		count(p.idpersona) as count,a.capacidadPersonas as acomps,
+		DATE_FORMAT(dr.fec_inicio,'%d-%m-%Y') as fec_inicio,
+		DATE_FORMAT(dr.fec_fin,'%d-%m-%Y') as fec_fin, dr.estado
+		from t_usuario us join t_persona p
+		on us.idpersona=p.idpersona join t_cliente c
+		on p.idpersona=c.idpersona join t_reserva r
+		on c.idcliente=r.idcliente left join t_detallereserva dr
+		on r.idreserva=dr.idreserva left join t_acompanante_reserva acr
+		on dr.iddetallereserva=acr.iddetallereserva left join t_persona pp
+		on acr.idpersona=pp.idpersona left join t_ambiente a
+		on dr.idambiente=a.idambiente left join t_ambiente aP
+		on a.idambientepadre=ap.idambiente
+		where us.idusuario=#{idUsuario}
+		group by dr.iddetallereserva
+		order by idreserva asc;
+	</select>
+	<!-- -FIN DE BUSQUEDA DE AMBIENTE -->
+
+	<!-- ////////////////////// -->
+	<!-- BUSQUEDA DE RESERVA -->
+	<select id="busquedaReservaParamPersona" parameterType="personaMybatis"
+		resultType="hashMap">
+		SELECT r.idreserva,a.descripcion as
+		descripcionamb,p.idpersona,p.nombres,p.apepaterno,p.apematerno,
+		tp.descripcion,p.numdocumento, c.idcliente, dr.estado
+		FROM T_PERSONA P LEFT JOIN T_CLIENTE C
+		ON P.IDPERSONA=C.IDPERSONA JOIN T_TIPODOCUMENTO TP
+		ON P.IDTIPODOCUMENTO=TP.IDTIPODOCUMENTO JOIN T_ACOMPANANTE_RESERVA AR
+		ON P.IDPERSONA=AR.IDPERSONA JOIN T_DETALLERESERVA DR
+		ON AR.IDDETALLERESERVA=DR.IDDETALLERESERVA JOIN T_AMBIENTE A
+		ON DR.IDAMBIENTE=A.IDAMBIENTE JOIN T_RESERVA R
+		ON DR.IDRESERVA=R.IDRESERVA
+		WHERE P.NOMBRES LIKE #{nombres} or
+		P.APEPATERNO LIKE #{apePaterno} or
+		P.APEMATERNO LIKE #{apeMaterno} or
+		P.numdocumento like #{numDocumento}
+		group by p.idpersona,r.idreserva
+	</select>
+	<!-- -FIN BUSQUEDA DE RESERVA -->
+
+	<!-- /////////////// -->
+	<!-- RESULTADO DE BUSQUEDA DE RESERVA -->
+	<select id="q_getPersonaByIdPersona" resultType="personaMybatis">
+		SELECT P.* FROM T_PERSONA P
+		WHERE P.IDPERSONA=#{idPersona};
+	</select>
+
+	<select id="q_listarDetalleReservaByIdReserva" resultType="hashMap">
+		select r.idreserva,dr.idDetalleReserva,aP.numberoLocal as
+		cabLocal,a.numberoLocal as habLocal,
+		count(p.idpersona) as count,a.capacidadPersonas as acomps,
+		DATE_FORMAT(dr.fec_inicio,'%d-%m-%Y') as fec_inicio,
+		DATE_FORMAT(dr.fec_fin,'%d-%m-%Y') as fec_fin, dr.estado,
+		a.codAmbiente
+		from t_reserva r join t_detallereserva dr
+		on r.idreserva=dr.idreserva left join t_acompanante_reserva acr
+		on dr.iddetallereserva=acr.iddetallereserva left join t_persona p
+		on acr.idpersona=p.idpersona left join t_ambiente a
+		on dr.idambiente=a.idambiente left join t_ambiente aP
+		on a.idambientepadre=ap.idambiente
+		where r.idreserva=#{idReserva} and p.estado = 0
+		group by dr.iddetallereserva;
+	</select>
+
+	<select id="q_getDetalleReservaByIdDetalleReserva" resultType="hashMap">
+		select dr.idDetalleReserva,aP.numberoLocal as cabLocal,a.descripcion,
+		count(p.idpersona) as count,a.numberoLocal as
+		habLocal,a.capacidadPersonas,
+		DATE_FORMAT(dr.fec_inicio,'%d-%m-%Y') as fec_inicio,
+		DATE_FORMAT(dr.fec_fin,'%d-%m-%Y') as fec_fin, a.codAmbiente
+		from t_detallereserva dr join t_ambiente a
+		on dr.idambiente=a.idambiente left join t_ambiente aP
+		on a.idambientepadre=ap.idambiente left join t_acompanante_reserva acr
+		on dr.iddetallereserva=acr.iddetallereserva left join t_persona p
+		on acr.idpersona=p.idpersona
+		where dr.idDetalleReserva=#{idDetalleReserva}
+		group by dr.iddetallereserva;
+	</select>
+
+	<select id="q_listarAcompanantes" resultType="personaMybatis">
+		SELECT P.* FROM T_ACOMPANANTE_RESERVA ACR JOIN T_PERSONA P
+		ON ACR.IDPERSONA=P.IDPERSONA
+		WHERE ACR.IDDETALLERESERVA=#{idDetalleReserva} AND P.ESTADO=0
+	</select>
+	<!-- -FIN RESULTADO DE BUSQUEDA DE RESERVA -->
+
+	<!-- GESTION DE RESERVA -->
+	<select id="q_consultarDisponibilidadAmbiente" resultType="int"
+		parameterMap="rangoParam">
+		SELECT count(*)
+		FROM T_DETALLERESERVA
+		WHERE idambiente=(select idambiente from t_detallereserva where
+		iddetallereserva=#{param1})
+		AND STR_TO_DATE(#{desde}, '%d-%m-%Y') AND STR_TO_DATE(#{hasta},
+		'%d-%m-%Y')
+		BETWEEN FEC_INICIO AND FEC_FIN
+	</select>
+
+	<select id="q_guardarNuevoRangoDeReserva" resultType="int"
+		parameterMap="rangoParam">
+		UPDATE T_DETALLERESERVA SET FEC_INICIO=STR_TO_DATE(#{desde}, '%d-%m-%Y'),
+		FEC_FIN=STR_TO_DATE(#{hasta}, '%d-%m-%Y')
+		WHERE IDDETALLERESERVA=#{param1};
+	</select>
+	<!-- -FIN DE GESTION DE RESERVA -->
+
+	<select id="q_buscarReservaByUsuario" resultType="hashMap"
+		parameterMap="rangoParam">
+		SELECT
+		r.idreserva,c.idcliente,p.nombres,p.apepaterno,p.apematerno,tp.descripcion,p.numdocumento
+		FROM T_USUARIO u JOIN T_PERSONA P
+		on u.idpersona=p.idpersona JOIN T_CLIENTE C
+		ON C.IDPERSONA=P.IDPERSONA JOIN T_RESERVA R
+		ON C.IDCLIENTE=R.IDCLIENTE JOIN T_TIPODOCUMENTO TP
+		ON P.IDTIPODOCUMENTO=TP.IDTIPODOCUMENTO
+		WHERE u.user=#{desde} and u.pwd=#{hasta}
+	</select>
+
+	<select id="q_buscarReservaByLogged" resultType="hashMap"
+		parameterMap="rangoParam">
+		SELECT
+		r.idreserva,c.idcliente,p.nombres,p.apepaterno,p.apematerno,tp.descripcion,p.numdocumento
+		FROM T_USUARIO u JOIN T_PERSONA P
+		on u.idpersona=p.idpersona JOIN T_CLIENTE C
+		ON C.IDPERSONA=P.IDPERSONA JOIN T_RESERVA R
+		ON C.IDCLIENTE=R.IDCLIENTE JOIN T_TIPODOCUMENTO TP
+		ON P.IDTIPODOCUMENTO=TP.IDTIPODOCUMENTO
+		WHERE u.idUsuario=#{idUsuario}
+	</select>
+
+	<select id="qdml_insertDetalleReserva" parameterMap="parametroBuilder">
+		insert into t_detallereserva
+		values (null,#{param1},#{param2},#{param3},#{param4},0)
+	</select>
+
+	<select id="q_listarConsumosPorDetalleReserva" resultType="hashMap">
+		select
+		pt.idtarjetapersona,p.nombres,p.apepaterno,p.apematerno,p.idtipodocumento,p.numdocumento,
+		ar.flagentregatarjeta,sum(c.precioGrabado*c.cantidad) as consumo
+		from
+		t_consumo c right join t_persona_tarjeta pt
+		on
+		c.idtarjetapersona=pt.idtarjetapersona right join t_persona p
+		on
+		pt.idpersona=p.idpersona join t_acompanante_reserva ar
+		on
+		p.idpersona=ar.idpersona join t_detallereserva dr
+		on
+		ar.iddetallereserva=dr.iddetallereserva
+		where
+		dr.iddetallereserva=#{idDetalleReserva} and p.estado=0
+		group by
+		p.idpersona
+	</select>
+
+	<select id="q_consumoByPersonaTarjeta" resultType="hashMap">
+		select
+		sum(c.precioGrabado*c.cantidad) as
+		subtotal,c.idtarjetapersona,c.cantidad,c.preciograbado,
+		pg.idproducto,tp.descripcion as descripcionprod, pg.descripcion
+		from
+		t_consumo c join t_productoglobal pg
+		on
+		c.idproductoglobal=pg.idproductoglobal join t_tipoproducto tp
+		on
+		pg.idtipoproducto=tp.idtipoproducto
+		where
+		c.idtarjetapersona=#{idTarjetaPersona}
+		group by pg.idproducto
+	</select>
+
+	<select id="q_consumoTotalByIdPersona" resultType="string">
+		select
+		sum(c.precioGrabado*c.cantidad) as total
+		from t_consumo c join
+		t_productoglobal pg
+		on c.idproductoglobal=pg.idproductoglobal join
+		t_tipoproducto tp
+		on pg.idtipoproducto=tp.idtipoproducto join
+		t_persona_tarjeta pt
+		on c.idtarjetapersona=pt.idtarjetapersona
+		where
+		pt.idpersona=#{idPersona}
+		group by c.idtarjetapersona
+	</select>
+
+	<insert id="dml_registroPersona" parameterType="personaMybatis">
+		<selectKey order="AFTER" keyProperty="idPersona" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into t_persona
+		values (null,1,#{nombres},#{apePaterno},#{apeMaterno},#{numDocumento},
+		#{telf},#{cel},#{email},#{estado})
+	</insert>
+
+	<insert id="dml_registroUsuario" parameterType="usuarioMybatis">
+		<selectKey order="AFTER" keyProperty="idUsuario" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into t_usuario
+		values (null,#{personaDTO.idPersona},1,#{user},#{pwd})
+	</insert>
+
+	<insert id="dml_registroCliente" parameterType="clienteMybatis">
+		<selectKey order="AFTER" keyProperty="idCliente" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into t_cliente
+		values (null,#{personaDTO.idPersona},#{razonSocial},#{ruc},
+		#{cantidadReservasCumplidas},#{estado})
+	</insert>
+
+	<insert id="dml_registroReserva" parameterType="reservaMybatis">
+		<selectKey order="AFTER" keyProperty="idReserva" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into t_reserva
+		values (null,#{clienteDTO.idCliente},#{fechaRegistro},#{estado})
+	</insert>
+
+	<insert id="dml_registroDetalleReserva" parameterType="detalleReservaMybatis">
+		<selectKey order="AFTER" keyProperty="idDetalleReserva"
+			resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into t_detallereserva
+		values
+		(null,#{reservaDTO.idReserva},#{ambienteDTO.idAmbiente},#{fecInicio},#{fecFin},#{estadoActivacionReserva})
+	</insert>
+
+	<insert id="dml_registroAcompAndDetalleRes" parameterType="acompananteReservaMybatis">
+		insert into t_acompanante_reserva
+		values (#{idPersona},#{idDetalleReserva},#{flagEntregaTarjeta},#{estado})
+	</insert>
+
+	<select id="q_getClienteByIdUsuario" resultType="clienteMybatis">
+		select c.*
+		from t_persona p join t_usuario u
+		on p.idpersona=u.idpersona join t_cliente c
+		on p.idpersona=c.idpersona
+		where u.idUsuario=#{idUsuario}
+	</select>
+
+	<select id="q_getClienteByUser" resultType="clienteMybatis">
+		select c.*
+		from t_persona p join t_usuario u
+		on p.idpersona=u.idpersona join t_cliente c
+		on p.idpersona=c.idpersona
+		where u.user=#{user}
+	</select>
+
+	<select id="getClienteByidCliente" parameterType="string"
+		resultType="clienteMybatis">
+		SELECT C.*
+		FROM T_CLIENTE C
+		WHERE C.IDCLIENTE = #{IDCLIENTE}
+	</select>
+
+	<select id="q_getPersonaByIdCliente" resultType="personaMybatis">
+		SELECT P.*
+		FROM T_PERSONA P JOIN T_CLIENTE C
+		JOIN P.IDPERSONA=C.IDPERSONA
+		WHERE C.IDCLIENTE=#{idCliente}
+	</select>
+
+	<update id="dml_modificarDetalleReservaToCheck" parameterMap="rangoParam">
+		update t_detallereserva set estado=#{desde} where
+		idDetalleReserva=#{hasta}
+	</update>
+
+	<update id="m_modificarPersonaByIdPersona" parameterType="personaMybatis">
+		update
+		t_persona set
+		nombres=#{nombres},apePaterno=#{apePaterno},apeMaterno=#{apeMaterno},numDocumento=#{numDocumento},telf=#{telf},cel=#{cel},email=#{email},estado=#{estado}
+		where idPersona=#{idPersona}
+	</update>
+
+	<select id="q_getIdTarjetaByNumero" resultType="int">
+		SELECT
+		T.IDTARJETA
+		FROM T_TARJETA T
+		WHERE T.NUMERO=#{numero}
+	</select>
+
+	<insert id="dml_registroTarjetaAcomp" parameterType="personaTarjetaMybatis">
+		insert into
+		t_persona_tarjeta
+		values
+		(null,#{tarjetaDTO.idTarjeta},#{reservaDTO.idReserva},#{personaDTO.idPersona},null)
+	</insert>
+
+	<!-- ///////////////// -->
+	<!-- GESTION DE AMBIENTE -->
+	<select id="q_listarAmbientes" resultType="ambienteMybatis">
+		SELECT
+		IDAMBIENTE as idAmbiente,
+		DESCRIPCION as descripcion,
+		PRECIO as precio,
+		NUMBEROLOCAL as numberoLocal,
+		URLIMAGEN as urlimagen,
+		PISO as piso,
+		CANTCUARTOS as cantCuartos,
+		CAPACIDADPERSONAS as capacidadPersonas,
+		CANTASIENTOSCONPRIVILEGIOS as cantAsientosConPrivilegios,
+		FLAGMINIBAR as flagMiniBar,
+		FLAGAMBIENTEOFERTA as flagAmbienteOferta,
+		CANTMINRESERVASPARAPROMOCION as cantMinReservasParaPromocion,
+		ESTADO as estado,
+		IDAMBIENTEPADRE as idAmbientePadre,
+		CODAMBIENTE as codAmbiente
+		FROM T_AMBIENTE
+	</select>
+	
+	<select id="q_listaAmbienteCodigo" resultType="ambienteMybatis">
+		SELECT
+		IDAMBIENTE as idAmbiente,
+		DESCRIPCION as descripcion
+		FROM T_AMBIENTE WHERE CODAMBIENTE != 2
+		ORDER BY
+		DESCRIPCION ASC
+	</select>
+
+	<select id="q_updateAmbiente" resultType="ambienteMybatis">
+		UPDATE
+		T_AMBIENTE
+		SET
+		DESCRIPCION = #{descripcion},
+		PRECIO = #{precio},
+		NUMBEROLOCAL = #{numberoLocal},
+		URLIMAGEN = #{urlimagen},
+		PISO = #{piso},
+		CANTCUARTOS = #{cantCuartos},
+		CAPACIDADPERSONAS = #{capacidadPersonas},
+		CANTASIENTOSCONPRIVILEGIOS = #{cantAsientosConPrivilegios},
+		FLAGMINIBAR = #{flagMiniBar},
+		FLAGAMBIENTEOFERTA = #{flagAmbienteOferta},
+		CANTMINRESERVASPARAPROMOCION = #{cantMinReservasParaPromocion},
+		ESTADO = #{estado},
+		CODAMBIENTE = #{codAmbiente}
+		WHERE IDAMBIENTE = #{idAmbiente}
+	</select>
+
+	<select id="q_deleteAmbiente" resultType="int">
+		DELETE FROM T_AMBIENTE
+		WHERE IDAMBIENTE = #{idAmbiente}
+	</select>
+
+	<select id="q_registraAmbiente" parameterType="ambienteMybatis">
+		INSERT INTO
+		T_AMBIENTE
+		VALUES(null,
+		#{descripcion},
+		#{precio},
+		#{numberoLocal},
+		#{urlimagen},
+		#{piso},
+		#{cantCuartos},
+		#{capacidadPersonas},
+		#{cantAsientosConPrivilegios},
+		#{flagMiniBar},
+		#{flagAmbienteOferta},
+		#{cantMinReservasParaPromocion},
+		#{estado},
+		#{ambienteDTO.idAmbiente},
+		#{codAmbiente})
+	</select>
+
+</mapper>
