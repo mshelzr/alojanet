@@ -51,7 +51,10 @@ public class CheckInAction extends ActionSupport {
 	//modificar estado del checkin
 	private int val;
 	
-	/////////
+	//new beans para los detalles
+	private Map<String, Object> datosPersonaReserva;
+	private List<PersonaDTO> listaAcompanantes;
+	
 //	BUSQUEDA DE RESERVA
 	@Action(value="/buscarReserva",results={@Result(name="success",type="json")})
 	public String buscarReserva(){
@@ -97,33 +100,21 @@ public class CheckInAction extends ActionSupport {
 		resultMap.put("pers", dtoToJsonPersona);
 		resultMap.put("listaDetalles", listaDetalles);
 		resultMap.put("totalPagar", lblTotal);
+        resultMap.put("hola",value);
 
 		JSONObject js=JSONObject.fromObject(resultMap);
 		this.setMessage(js.toString());
 		return SUCCESS;
 	}
 
-	@Action(value="/irModalDetalleReserva",results={@Result(name="success",type="json")})
+	@Action(value="/irModalDetalleReserva",results=
+		{@Result(location="detalleReserva", name="success",type="tiles")})
 	public String irModalDetalleReserva(){
 
-		Map<String,Object> resultMap=new HashMap<String,Object>();
-		Gson gs=new Gson();
-
-		Map<String, Object> detalleReserva=new HashMap<String, Object>();
-		List<PersonaDTO> listaAcompanantes=new ArrayList<PersonaDTO>();
-
-		int idDetalleReserva=Integer.parseInt(value);
+		int idDetalleReserva = Integer.parseInt(value);
 		
-		detalleReserva=cdao.getDetalleReserva(idDetalleReserva);
-		listaAcompanantes=cdao.listarAcompanantes(idDetalleReserva);
-		
-		String dtoToJsonAcomps=gs.toJson(listaAcompanantes);
-
-		resultMap.put("detalleReserva", detalleReserva);
-		resultMap.put("listaAcompanantes", dtoToJsonAcomps);
-
-		JSONObject js=JSONObject.fromObject(resultMap);
-		this.setMessage(js.toString());
+		this.setDatosPersonaReserva(cdao.getDetalleReserva(idDetalleReserva));
+		this.setListaAcompanantes(cdao.listarAcompanantes(idDetalleReserva));
 		return SUCCESS;
 	}
 
@@ -282,6 +273,22 @@ public class CheckInAction extends ActionSupport {
 
 	public void setNumero(String numero) {
 		this.numero = numero;
+	}
+
+	public Map<String, Object> getDatosPersonaReserva() {
+		return datosPersonaReserva;
+	}
+
+	public void setDatosPersonaReserva(Map<String, Object> datosPersonaReserva) {
+		this.datosPersonaReserva = datosPersonaReserva;
+	}
+
+	public List<PersonaDTO> getListaAcompanantes() {
+		return listaAcompanantes;
+	}
+
+	public void setListaAcompanantes(List<PersonaDTO> listaAcompanantes) {
+		this.listaAcompanantes = listaAcompanantes;
 	}
 
 }

@@ -223,12 +223,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="q_listarDetalleReservaByIdReserva" resultType="hashMap">
-		select r.idreserva,dr.idDetalleReserva,aP.numberoLocal as
-		cabLocal,a.numberoLocal as habLocal,
+		select r.idreserva, dr.idDetalleReserva, aP.numberoLocal as
+		cabLocal, a.numberoLocal as habLocal,
 		count(p.idpersona) as count,a.capacidadPersonas as acomps,
 		DATE_FORMAT(dr.fec_inicio,'%d-%m-%Y') as fec_inicio,
-		DATE_FORMAT(dr.fec_fin,'%d-%m-%Y') as fec_fin, dr.estado,
-		a.codAmbiente
+		DATE_FORMAT(dr.fec_fin,'%d-%m-%Y') as fec_fin, dr.estado, a.codAmbiente
 		from t_reserva r join t_detallereserva dr
 		on r.idreserva=dr.idreserva left join t_acompanante_reserva acr
 		on dr.iddetallereserva=acr.iddetallereserva left join t_persona p

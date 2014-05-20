@@ -775,7 +775,7 @@ $(function () {
 								'<td>'+f.count+'/'+f.acomps+'</td>' +
 								'<td>'+f.fec_inicio+'</td>' +
 								'<td>'+f.fec_fin+'</td>' +
-								'<td><a data-toggle="modal" data-flag='+f.codAmbiente+' data-scope='+f.acomps+' href="#" class="btnModalDetalleReserva" data-action='+f.idDetalleReserva+' > ' +
+								'<td><a data-toggle="modal" data-flag='+f.codAmbiente+' data-scope='+f.acomps+' href="irModalDetalleReserva.action?value='+f.idDetalleReserva+'" class="btnModalDetalleReserva" data-action='+f.idDetalleReserva+' > ' +
 								'<span class="glyphicon glyphicon-eye-open"></span></a></td>' +
 								'</tr>';
 							}
@@ -843,7 +843,7 @@ $(function () {
 		});
 	});
 
-	$('body').on('click','.btnModalDetalleReserva', function () {
+	$('body').on('click','.btnModalDetalleReservaCAMBIODERUTA', function () {
 		var idDetalleReserva=$(this).attr('data-action');
 		$('#idDetalleReserva').val(idDetalleReserva);
 		var paginaActual=$('#paginaActual').val();
@@ -1064,7 +1064,7 @@ $(function () {
 				dataType:"json",
 				data:{idPersona:idPersona,idReserva:idReserva,idDetalleReserva:idDetalleReserva,acompData:acompData,tarjetaIndividual:tarjetaIndividual}, 
 				success:function(data){
-					location.reload();
+					alert('Guardado');
 				}, 
 				error: function(xhr, textStatus, errorThrown) { 
 					console.debug('Error procesarReservaCab!  Status = ' + xhr.status);
